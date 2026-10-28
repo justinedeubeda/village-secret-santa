@@ -537,24 +537,25 @@ function figSVG(c){
   const face=f?`<clipPath id="${id}"><circle cx="30" cy="28" r="${fr}"/></clipPath><image href="${f}" x="${30-fr}" y="${28-fr}" width="${2*fr}" height="${2*fr}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><circle cx="30" cy="28" r="${fr}" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.2"/>`:'';
   return `<svg viewBox="0 0 60 100" data-kind="${k}"><ellipse cx="30" cy="95" rx="19" ry="5" fill="rgba(20,30,60,.28)"/>${R.legs}<g class="body">${R.arms}${R.torso}${R.head}${f?face:R.feat}${R.top}<g class="gift"><rect x="40" y="62" width="18" height="15" rx="2" fill="#e74c3c"/><rect x="47" y="62" width="4" height="15" fill="#ffd35a"/><rect x="40" y="68" width="18" height="3" fill="#ffd35a"/></g></g></svg>`;}
 
-/* ---------- équipe fictive (13) ---------- */
+/* ---------- équipe fictive de démo (13) ---------- */
 let TEAM=[
- {n:'Justine',coat:'#c0392b',hat:'#2f6b4f',scarf:'#f4c95d',skin:'#f2c7a5'},
- {n:'Maxime',coat:'#2a6f9e',hat:'#c0392b',scarf:'#fff',skin:'#e8b48a'},
- {n:'Corentin',coat:'#2f6b4f',hat:'#c0392b',scarf:'#fff',skin:'#f6d3b3'},
- {n:'Loic',coat:'#7a2d3a',hat:'#2f6b4f',scarf:'#f4c95d',skin:'#a46f4b'},
- {n:'Mehdi',coat:'#44546a',hat:'#d9822b',scarf:'#fff',skin:'#c68a64'},
- {n:'Clara',coat:'#6a4c93',hat:'#c0392b',scarf:'#fff',skin:'#f6d3b3'},
- {n:'Flora',coat:'#d9822b',hat:'#2a6f9e',scarf:'#fff',skin:'#f2c7a5'},
- {n:'Laura',coat:'#c25b8f',hat:'#5b3f8c',scarf:'#fff',skin:'#e8b48a'},
- {n:'Marie Hanh',coat:'#3b7d6b',hat:'#f4c95d',scarf:'#c0392b',skin:'#f2c7a5'},
- {n:'Marine',coat:'#b83a4b',hat:'#fff',scarf:'#2f6b4f',skin:'#f6d3b3'},
- {n:'An',coat:'#e0a526',hat:'#2a6f9e',scarf:'#c0392b',skin:'#e8b48a'},
- {n:'Alice',coat:'#5b3f8c',hat:'#e0a526',scarf:'#fff',skin:'#f6d3b3'},
- {n:'Maroua',coat:'#2f6b4f',hat:'#f4c95d',scarf:'#c0392b',skin:'#b07a55'}
+ {n:'Léa',coat:'#c0392b',hat:'#2f6b4f',scarf:'#f4c95d',skin:'#f2c7a5'},
+ {n:'Hugo',coat:'#2a6f9e',hat:'#c0392b',scarf:'#fff',skin:'#e8b48a'},
+ {n:'Inès',coat:'#2f6b4f',hat:'#c0392b',scarf:'#fff',skin:'#f6d3b3'},
+ {n:'Théo',coat:'#7a2d3a',hat:'#2f6b4f',scarf:'#f4c95d',skin:'#a46f4b'},
+ {n:'Camille',coat:'#44546a',hat:'#d9822b',scarf:'#fff',skin:'#c68a64'},
+ {n:'Nathan',coat:'#6a4c93',hat:'#c0392b',scarf:'#fff',skin:'#f6d3b3'},
+ {n:'Manon',coat:'#d9822b',hat:'#2a6f9e',scarf:'#fff',skin:'#f2c7a5'},
+ {n:'Lucas',coat:'#c25b8f',hat:'#5b3f8c',scarf:'#fff',skin:'#e8b48a'},
+ {n:'Chloé',coat:'#3b7d6b',hat:'#f4c95d',scarf:'#c0392b',skin:'#f2c7a5'},
+ {n:'Jules',coat:'#b83a4b',hat:'#fff',scarf:'#2f6b4f',skin:'#f6d3b3'},
+ {n:'Emma',coat:'#e0a526',hat:'#2a6f9e',scarf:'#c0392b',skin:'#e8b48a'},
+ {n:'Louis',coat:'#5b3f8c',hat:'#e0a526',scarf:'#fff',skin:'#f6d3b3'},
+ {n:'Zoé',coat:'#2f6b4f',hat:'#f4c95d',scarf:'#c0392b',skin:'#b07a55'}
 ];
 {const DK=['classic','lutin','pere','neige','pingouin','casse','renne','pain','souris','sapin','mere','classic','lutin','pingouin','neige','renne','souris','pain'],HUM=['classic','lutin','pere','mere','casse','sapin'];
  TEAM=TEAM.map((m,i)=>{const k=DK[i%DK.length],l=lookOf({kind:k});if(k==='classic')return {n:m.n,kind:k,coat:m.coat,hat:m.hat,scarf:m.scarf,skin:m.skin,acc:l.acc};if(HUM.includes(k))l.skin=m.skin;return {n:m.n,...l};});}
+const DEMO_TEAM=TEAM.map(m=>({...m}));
 const OPENING={label:'',date:''};
 /* ---------- configuration (organisatrice) et liens personnels ---------- */
 const FXK=['music','snow','advent','photo','shops'];
@@ -579,6 +580,7 @@ function unpackObj(o){
 }
 const HP=new URLSearchParams(location.hash.slice(1));
 const TOKEN=HP.get('k')||'';
+let CKEY=(HP.get('n')||'').trim();
 let MODE=(HP.has('p')||TOKEN)?'player':HP.has('t')?'test':'org',PIDX=+HP.get('p')||0;
 try{const raw=HP.get('c')||HP.get('o');if(raw)unpackCfg(raw);else if(MODE==='player'&&TOKEN&&window.__SRVCFG)unpackObj(window.__SRVCFG);else if(MODE==='player'&&TOKEN){CFG.sb.url=(BAKED&&BAKED.u)||'';CFG.sb.key=(BAKED&&BAKED.k)||'';}else if(MODE==='player')MODE='org';if(MODE==='player'&&TOKEN&&raw&&!(CFG.sb.url&&CFG.sb.key))MODE='org';if(MODE==='player'&&!TOKEN&&!TEAM[PIDX])MODE='org';}catch(e){MODE='org';}
 if(BAKED&&!CFG.sb.url&&MODE!=='player'){CFG.sb.url=BAKED.u;CFG.sb.key=BAKED.k;}
@@ -1598,6 +1600,7 @@ if(CFG.fx.shops)SHOPS.forEach((h,i)=>hot('shop'+i,()=>`Entrer : ${SHOP_INFO[i].n
 
 /* ---------- espace organisateur : assistant en 4 étapes ---------- */
 function initSetup(){
+  if(!(HP.get('o')||HP.get('c')))TEAM=[];
   const S={step:0,max:0,base:location.href.split('#')[0],
     tpl:'Salut {prenom} ! Les lutins ont préparé une surprise pour l\'équipe : un Secret Santa dans un petit village de Noël interactif.\nVoici ton lien personnel (merci de ne pas le transmettre) : {lien}\nTu y trouveras ta lettre, quelques jeux, et tu pourras souffler tes idées aux lutins en toute discrétion. Ouverture des cadeaux {date}.{budget}'};
   const root=$('#setup'),body=$('#sBody'),foot=$('#sFoot'),STEPS=['1 · Équipe','2 · Règles','3 · Ambiance','4 · Liens','5 · Tirage'];
@@ -1605,7 +1608,7 @@ function initSetup(){
   const rtok=()=>{const a=new Uint8Array(18);crypto.getRandomValues(a);return [...a].map(x=>'abcdefghjkmnpqrstuvwxyz23456789'[x%31]).join('');};
   const ensureTok=()=>{TEAM.forEach(m=>{if(!m.tok)m.tok=rtok();});if(!CFG.admin)CFG.admin=rtok();};
   const srv=()=>!!(CFG.sb.url&&CFG.sb.key);
-  const sync=()=>{if(srv())ensureTok();try{history.replaceState(null,'','#o='+packCfg(true));}catch(e){}};
+  const sync=()=>{if(srv())ensureTok();try{history.replaceState(null,'','#o='+packCfg(true)+((CKEY&&!CFG.created)?'&n='+encodeURIComponent(CKEY):''));}catch(e){}};
   const randLook=()=>randLookK();
   const copy=async(txt,btn)=>{try{await navigator.clipboard.writeText(txt);}catch(e){const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(_){}t.remove();}
     if(btn){const o=btn.dataset.o||btn.textContent;btn.dataset.o=o;btn.textContent='Copié !';setTimeout(()=>btn.textContent=o,1400);}};
@@ -1630,6 +1633,7 @@ function initSetup(){
   $('#peekBar').onclick=endPeek;
   const R={
     0:()=>`<h2>Qui joue cette année ?</h2><p class="sNote">Ajoute chaque personne de l'équipe, toi comprise. Chacune aura son bonhomme dans le village, que l'on peut personnaliser ensuite.</p>
+      ${(srv()&&!CFG.created&&!CKEY)?`<div class="sWarn">Pour créer une vraie partie, ouvre le <b>lien de création</b> qu'on t'a envoyé (il se termine par <code>#n=…</code>). Sans lui, tu peux préparer ton équipe et essayer la démo.</div>`:''}
       ${CFG.created?`<div class="sPrev">Ta partie est déjà créée sur le serveur : tu peux <b>ajouter</b> des joueurs (étape 4, « Mettre à jour la partie »), mais pas en retirer ni les renommer.</div>`:''}
       <div class="sCnt"><b id="sCount">${TEAM.length}</b> joueur${TEAM.length>1?'s':''} <span style="opacity:.7">(à partir de 3)</span></div>
       <div id="sRows">${rowsHTML()}</div>
@@ -1646,7 +1650,7 @@ function initSetup(){
       <div class="fxg">${FX.map(([k,t,d,cl,inner])=>`<button class="fxc ${CFG.fx[k]?'on':''}" data-fx="${k}" ${k==='photo'&&!CFG.fx.advent?'disabled':''}><div class="fxv ${cl}">${inner}</div><b>${t}<span class="tg">${CFG.fx[k]?'Activé':'Coupé'}</span></b><small>${d}</small></button>`).join('')}</div>
       <p class="sNote" style="margin-top:14px"><b>Aperçu en direct</b> : ces trois boutons affichent le vrai village quelques secondes (l'assistant se masque), pour voir l'effet que verront tes collègues. Retour automatique après quelques secondes, ou via le bouton « Revenir à l'assistant ».</p>
       <div class="peekRow"><button class="btn ghost sm" data-peek="sleigh">Voir le traîneau du Père Noël</button><button class="btn ghost sm" data-peek="night">Voir le village de nuit</button><button class="btn ghost sm" data-peek="snow">Voir une grosse chute de neige</button></div>`,
-    4:()=>{if(!srv()||!CFG.created)return `<h2>Le tirage au sort</h2><div class="sWarn">Le tirage réel demande une partie créée sur le serveur de l'équipe (étape 4, avec le code de création). En démo, le tirage est simulé par le bouton « Coulisses » du village.</div>`;
+    4:()=>{if(!srv()||!CFG.created)return `<h2>Le tirage au sort</h2><div class="sWarn">Le tirage réel demande une partie créée sur le serveur de l'équipe (étape 4, avec le lien de création). En démo, le tirage est simulé par le bouton « Coulisses » du village.</div>`;
       const st=S.stat;return `<h2>Le tirage au sort</h2><p class="sNote">Il se fait sur le serveur. Les exclusions (« moins à l'aise avec ») sont toujours respectées et les « j'adorerais offrir à » sont maximisés. Cet écran n'affiche jamais les paires.</p>
       <div class="sTop"><button class="btn ghost sm" id="sStat">Actualiser le suivi</button></div>
       <div class="sPrev">${st?(st.err?`<span style="color:#a02418">${esc(st.err)}</span>`:`<b>${st.yes}</b> participent · <b>${st.no}</b> déclinent · <b>${st.pending}</b> sans réponse · <b>${st.ready}</b> cadeaux prêts${st.pending?`<br>En attente : ${st.pending_names.map(esc).join(', ')}`:''}${st.drawn?'<br><b>Le tirage a eu lieu.</b>':''}`):'Clique sur « Actualiser le suivi » pour voir les réponses.'}</div>
@@ -1659,7 +1663,7 @@ function initSetup(){
       <div class="sTop" style="margin-top:14px"><button class="btn ghost sm" id="sDel">Supprimer définitivement ma partie</button> <small style="opacity:.75">À faire après l'événement pour effacer photos et réponses.</small></div>`;},
     3:()=>{
       const inst=BAKED?'':`<details class="sSrv" ${srv()?'open':''}><summary><b>Installation du serveur</b> (réservé à la personne qui publie le village, une seule fois) ${srv()?'· renseigné':''}</summary>
-        <ol class="sNote" style="padding-left:18px;line-height:1.55"><li>Crée un projet gratuit sur supabase.com.</li><li>Dans <i>SQL Editor</i>, colle le fichier <b>supabase-schema.sql</b> (en y mettant ton code de création) et exécute-le.</li><li>Dans <i>Settings &gt; API</i>, copie l'URL du projet et la clé publique (<i>anon</i> ou <i>publishable</i>) dans les champs.</li><li>Télécharge le fichier à publier : il contient l'URL et la clé, donc plus personne n'a rien à configurer. Mets-le en ligne (GitHub Pages, Netlify Drop…) et partage son adresse aux organisateurs.</li></ol>
+        <ol class="sNote" style="padding-left:18px;line-height:1.55"><li>Crée un projet gratuit sur supabase.com.</li><li>Dans <i>SQL Editor</i>, colle le fichier <b>supabase-schema.sql</b> (en y mettant un secret de ton choix à la place de CODE_DE_CREATION, qui formera ton lien de création) et exécute-le.</li><li>Dans <i>Settings &gt; API</i>, copie l'URL du projet et la clé publique (<i>anon</i> ou <i>publishable</i>) dans les champs.</li><li>Télécharge le fichier à publier : il contient l'URL et la clé, donc plus personne n'a rien à configurer. Mets-le en ligne (GitHub Pages, Netlify Drop…) et partage son adresse aux organisateurs.</li></ol>
         <div class="sGrid"><label>URL du projet<input type="text" id="sSbUrl" value="${esc(CFG.sb.url)}" placeholder="https://xxxx.supabase.co"></label><label>Clé publique<input type="text" id="sSbKey" value="${esc(CFG.sb.key)}" placeholder="eyJ… ou sb_publishable_…"></label></div>
         <button class="btn green sm" id="sDl" style="margin-top:8px">Télécharger le fichier à publier (index.html)</button></details>`;
       const baseBox=`<label class="lab" style="margin-top:10px">Adresse du village<input type="text" id="sBase" value="${esc(S.base)}"></label>
@@ -1670,7 +1674,7 @@ function initSetup(){
       <div class="sTable">${TEAM.map((m,i)=>`<div class="lrow"><div class="sav" style="width:20px;height:34px">${figSVG(m)}</div><span>${esc(m.n)}</span><button class="btn ghost sm" data-cl="${i}">Copier le lien</button><button class="btn ghost sm" data-cm="${i}">Copier le message</button><button class="btn ghost sm" data-ct="${i}">${srv()?'Tester en tant que '+esc(m.n):'Tester'}</button>${srv()?`<button class="btn ghost sm" data-cr="${i}" title="Lien perdu ? Génère-en un nouveau (l'ancien cesse de fonctionner)">Nouveau lien</button>`:''}</div>`).join('')}</div>`;
       if(srv()&&!CFG.created)return `<h2>Crée ta partie</h2><p class="sNote">Ta partie est créée sur le serveur de l'équipe. Tes joueurs, tes liens et ton tirage sont totalement isolés de ceux des autres organisateurs, et seuls les joueurs et toi y avez accès.</p>
         <div class="sPrev"><b>${TEAM.length}</b> joueur${TEAM.length>1?'s':''} · ouverture ${esc(OPENING.label)}<br>Tu pourras encore changer les réglages et ajouter des joueurs ensuite.</div>
-        <label class="lab" style="margin-top:10px">Code de création<input type="text" id="sCode" placeholder="Le code donné par la personne qui a publié le village" autocomplete="off"></label>
+        ${CKEY?'<p class="sNote">Ton lien de création est reconnu. Il ne sert qu\'une fois, à ce moment précis.</p>':'<div class="sWarn">Il te faut le <b>lien de création</b> fourni par la personne qui a publié le village : ouvre-le, puis reviens ici. Tu peux aussi coller son code ci-dessous.</div><label class="lab" style="margin-top:10px">Code du lien de création<input type="text" id="sCode" placeholder="La fin du lien après #n=" autocomplete="off"></label>'}
         <div class="sTop"><button class="btn primary" id="sCreate">Créer ma partie</button></div><div class="sErr" id="sErr"></div>${inst}`;
       if(srv())return `<h2>Envoie les liens personnels</h2><p class="sNote">Un lien court par personne : il ouvre directement son bonhomme et sa lettre, sans choisir de prénom.</p>
         <div class="sPrev">Partie créée sur le serveur. Si tu changes les réglages ou ajoutes un joueur, clique sur <button class="btn ghost sm" id="sPush">Mettre à jour la partie</button><br><small style="opacity:.75">Ajouter un joueur est possible jusqu'au tirage ; en retirer ou renommer ne l'est pas.</small></div>
@@ -1685,7 +1689,7 @@ function initSetup(){
   };
   const setErr=t=>{const e=$('#sErr');if(e)e.textContent=t;};
   const goto2=n=>{S.step=n;S.max=Math.max(S.max,n);render();};
-  const startTest=()=>{try{history.replaceState(null,'','#o='+packCfg()+'&t=1');}catch(e){}location.reload();};
+  const startTest=()=>{if(TEAM.length<3)TEAM=DEMO_TEAM.map(m=>({...m}));try{history.replaceState(null,'','#o='+packCfg()+'&t=1');}catch(e){}location.reload();};
   root.addEventListener('click',e=>{
     const t=e.target,b=t.closest('button');if(!b)return;
     if(b.dataset.go!=null){goto2(+b.dataset.go);return;}
@@ -1707,7 +1711,7 @@ function initSetup(){
     else if(b.dataset.ct!=null)window.open(testLink(+b.dataset.ct),'_blank');
     else if(b.id==='sAllMsg')copy(TEAM.map((m,i)=>m.n+'\n'+msg(i)).join('\n\n---\n\n'),b);
     else if(b.id==='sOrg')copy(S.base+'#o='+packCfg(true),b);
-    else if(b.id==='sCreate'){const code=($('#sCode').value||'').trim();if(!code){setErr('Saisis le code de création.');return;}const e0=teamErr();if(e0){setErr(e0);return;}ensureTok();b.disabled=true;setErr('Création de la partie…');
+    else if(b.id==='sCreate'){const code=CKEY||(($('#sCode')||{}).value||'').trim();if(!code){setErr('Il te faut le lien de création pour créer une partie.');return;}const e0=teamErr();if(e0){setErr(e0);return;}ensureTok();b.disabled=true;setErr('Création de la partie…');
       API.rpc('create_game',{p_code:code,p_admin:CFG.admin,p_opening:new Date(CFG.date+'T'+(CFG.time||'09:00')).toISOString(),p_players:TEAM.map(m=>({name:m.n.trim(),token:m.tok})),p_config:srvCfg()}).then(()=>{CFG.created=1;S.drawOk=true;S.drawMsg='Partie créée ! Tes liens sont prêts ci-dessous.';sync();render();}).catch(e=>{b.disabled=false;setErr(e.message||'Erreur');});}
     else if(b.id==='sPush'){const e0=teamErr();if(e0){S.drawOk=false;S.drawMsg=e0;render();return;}ensureTok();const iso=()=>new Date(CFG.date+'T'+(CFG.time||'09:00')).toISOString();
       adm('admin_players',{p_admin:CFG.admin}).then(names=>{const have=new Set(names.map(x=>x.toLowerCase()));const add=TEAM.filter(m=>!have.has(m.n.trim().toLowerCase())).map(m=>({name:m.n.trim(),token:m.tok}));return (add.length?adm('add_players',{p_admin:CFG.admin,p_players:add}):Promise.resolve()).then(()=>adm('set_config',{p_admin:CFG.admin,p_config:srvCfg()})).then(()=>adm('set_opening',{p_admin:CFG.admin,p_opening:iso()})).then(()=>{S.drawOk=true;S.drawMsg='Partie mise à jour'+(add.length?' ('+add.length+' joueur'+(add.length>1?'s':'')+' ajouté'+(add.length>1?'s':'')+')':'')+'.';render();});}).catch(e=>{S.drawOk=false;S.drawMsg=e.message;render();});}
