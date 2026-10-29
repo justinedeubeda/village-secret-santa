@@ -336,6 +336,10 @@ body.player details.demo{display:none}
 .sCard{width:min(800px,100%);max-height:96vh;display:flex;flex-direction:column;background:linear-gradient(var(--paper),var(--paper2));border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden}
 .sHead{padding:16px 24px 12px;border-bottom:1px solid rgba(120,80,30,.22)}
 .sKick{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:700}
+.orgl{font-size:12.5px;display:flex;align-items:center;gap:4px;white-space:nowrap;font-weight:600;color:#7a2d4f}.orgl input{accent-color:#c0392b}
+.dtab{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}.dtab th{text-align:left;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;opacity:.7;padding:6px 8px;border-bottom:2px solid rgba(120,80,30,.25)}.dtab td{padding:7px 8px;border-bottom:1px solid rgba(120,80,30,.15)}
+.arow{display:grid;grid-template-columns:140px 1fr;gap:6px 10px;padding:8px 0;border-bottom:1px solid rgba(120,80,30,.15);align-items:start}.arow.tmr{background:rgba(244,201,93,.25);border-radius:8px;padding:8px}.arow .ad small{display:block;opacity:.7;font-size:11.5px}.arow .ad em{color:#c0392b;font-style:normal;font-weight:700;font-size:12px}.arow textarea{min-height:56px;width:100%}.arow input{grid-column:2;width:100%}.arow .adt{opacity:.8}
+@media (max-width:700px){.arow{grid-template-columns:1fr}.arow input{grid-column:1}}
 .sSteps{display:flex;gap:6px;margin-top:12px}
 .sSteps button{flex:1;border:0;font-weight:700;font-family:inherit;cursor:pointer}
 .sSteps button:disabled{cursor:default}
@@ -440,6 +444,7 @@ body.player details.demo{display:none}
   <div class="tr">
     <button id="btnPts" class="pill">Mes points : <b id="ptsN">0</b></button>
     <button id="btnMail" class="pill">Courrier des lutins<span id="mailN" class="badge hidden">0</span></button>
+    <button id="btnOrg" class="pill hidden">Espace organisateur</button>
     <button id="btnAdvent" class="pill">Calendrier de l'Avent<span id="advDot" class="dot hidden"></span></button>
     <button id="btnMusic" class="pill">Musique : oui</button>
     <button id="btnInstall" class="pill hidden">Rappel et mobile</button>
@@ -492,7 +497,7 @@ body.player details.demo{display:none}
 
 <script>
 const BAKED=/*B*/{"u":"https://xmishnbxlprtupvfqvru.supabase.co","k":"sb_publishable_p9Zce6EHgPYSvPBc44B3Fw_u8YJkApD"}/*B*/;
-(function(){try{const h=new URLSearchParams(location.hash.slice(1)),k=h.get('k');
+(function(){try{const h=new URLSearchParams(location.hash.slice(1)),k=h.get('k')||h.get('d');
  if(k&&!h.get('c')&&!h.get('o')&&BAKED){const x=new XMLHttpRequest();x.open('POST',BAKED.u.replace(/\/+$/,'')+'/rest/v1/rpc/config',false);x.setRequestHeader('apikey',BAKED.k);x.setRequestHeader('Content-Type','application/json');x.send(JSON.stringify({p_token:k}));if(x.status===200)window.__SRVCFG=JSON.parse(x.responseText);}}catch(e){}})();
 </script>
 <script>
@@ -633,7 +638,7 @@ const DEF_DATE=(()=>{const n=new Date();let y=n.getFullYear();if(n>new Date(y,11
 const CFG={date:DEF_DATE,time:'09:00',occasion:'',city:'',budget:'',welcome:'',fx:{music:1,snow:1,advent:1,photo:1,shops:1},sb:{url:'',key:''},admin:'',created:0};
 const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const b64d=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));
-const cfgObj=org=>({t:TEAM.map(m=>{const l=lookOf(m),h=v=>(v||'').replace('#','');return [m.n.trim(),h(l.coat),h(l.hat),h(l.scarf),h(l.skin),l.kind,h(l.acc)].concat(org?[m.tok||'']:[]);}),d:CFG.date,h:CFG.time,o:CFG.occasion,v:CFG.city,b:CFG.budget,w:CFG.welcome,f:FXK.map(k=>CFG.fx[k]?1:0).join(''),s:CFG.sb.url,a:CFG.sb.key,m:org?CFG.admin:'',g:org&&CFG.created?1:0});
+const cfgObj=org=>({t:TEAM.map(m=>{const l=lookOf(m),h=v=>(v||'').replace('#','');return [m.n.trim(),h(l.coat),h(l.hat),h(l.scarf),h(l.skin),l.kind,h(l.acc)].concat(org?[m.tok||'']:[]);}),d:CFG.date,h:CFG.time,o:CFG.occasion,v:CFG.city,b:CFG.budget,w:CFG.welcome,f:FXK.map(k=>CFG.fx[k]?1:0).join(''),s:CFG.sb.url,a:CFG.sb.key,m:org?CFG.admin:'',g:org&&CFG.created?1:0,adv:CFG.adv||{},ti:CFG.title||'',og:(TEAM.find(m=>m.org)||{}).n||''});
 const packCfg=org=>b64e(cfgObj(org));
 function syncOpening(){
   const d=new Date(CFG.date+'T12:00:00');
@@ -644,7 +649,8 @@ function unpackCfg(raw){unpackObj(b64d(raw));}
 function unpackObj(o){
   if(!o||!Array.isArray(o.t)||o.t.length<1)throw 0;
   TEAM=o.t.map(a=>{const nw=a.length>=7,k=nw&&CHAR[a[5]]?a[5]:'classic',H=v=>v?'#'+v:null,d=CHAR[k].def;return {n:NS(a[0],40),kind:k,coat:H(a[1])||d.coat,hat:CHAR[k].lb.hat===null?null:(H(a[2])||d.hat),scarf:H(a[3])||d.scarf,skin:H(a[4])||d.skin,acc:(nw&&H(a[6]))||d.acc,tok:(nw?a[7]:a[5])||''};});
-  CFG.sb.url=o.s||(BAKED&&BAKED.u)||'';CFG.sb.key=o.a||(BAKED&&BAKED.k)||'';CFG.admin=o.m||'';CFG.created=o.g?1:0;
+  if(o.og)TEAM.forEach(m=>{m.org=(m.n===NS(o.og,40));});
+  CFG.sb.url=o.s||(BAKED&&BAKED.u)||'';CFG.sb.key=o.a||(BAKED&&BAKED.k)||'';CFG.admin=o.m||'';CFG.created=o.g?1:0;CFG.adv=(o.adv&&typeof o.adv==='object')?o.adv:{};CFG.title=NS(o.ti||'',60);
   CFG.date=o.d||CFG.date;CFG.time=o.h||CFG.time;CFG.occasion=NS(o.o);CFG.city=NS(o.v);CFG.budget=NS(o.b);CFG.welcome=NS(o.w);
   FXK.forEach((k,i)=>CFG.fx[k]=o.f&&o.f[i]!=null?+o.f[i]:1);
   syncOpening();
@@ -652,8 +658,9 @@ function unpackObj(o){
 const HP=new URLSearchParams(location.hash.slice(1));
 const TOKEN=HP.get('k')||'';
 let CKEY=(HP.get('n')||'').trim();
+const DASHTOK=HP.get('d')||'';
 let MODE=(HP.has('p')||TOKEN)?'player':HP.has('t')?'test':'org',PIDX=+HP.get('p')||0;
-try{const raw=HP.get('c')||HP.get('o');if(raw)unpackCfg(raw);else if(MODE==='player'&&TOKEN&&window.__SRVCFG)unpackObj(window.__SRVCFG);else if(MODE==='player'&&TOKEN){CFG.sb.url=(BAKED&&BAKED.u)||'';CFG.sb.key=(BAKED&&BAKED.k)||'';}else if(MODE==='player')MODE='org';if(MODE==='player'&&TOKEN&&raw&&!(CFG.sb.url&&CFG.sb.key))MODE='org';if(MODE==='player'&&!TOKEN&&!TEAM[PIDX])MODE='org';}catch(e){MODE='org';}
+try{const raw=HP.get('c')||HP.get('o');if(DASHTOK&&!raw&&window.__SRVCFG){unpackObj(window.__SRVCFG);CFG.created=1;CFG.admin=DASHTOK;}else if(raw)unpackCfg(raw);else if(MODE==='player'&&TOKEN&&window.__SRVCFG)unpackObj(window.__SRVCFG);else if(MODE==='player'&&TOKEN){CFG.sb.url=(BAKED&&BAKED.u)||'';CFG.sb.key=(BAKED&&BAKED.k)||'';}else if(MODE==='player')MODE='org';if(MODE==='player'&&TOKEN&&raw&&!(CFG.sb.url&&CFG.sb.key))MODE='org';if(MODE==='player'&&!TOKEN&&!TEAM[PIDX])MODE='org';}catch(e){MODE='org';}
 if(BAKED&&!CFG.sb.url&&MODE!=='player'){CFG.sb.url=BAKED.u;CFG.sb.key=BAKED.k;}
 syncOpening();
 async function sbRpc(url,key,fn,args){if(!url||!key)throw new Error('cette page n\'est pas configurée pour le serveur');const r=await fetch(url.replace(/\/+$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':key,'Content-Type':'application/json'},body:JSON.stringify(args||{})});const j=await r.json().catch(()=>null);if(!r.ok)throw new Error((j&&(j.message||j.hint))||('HTTP '+r.status));return j;}
@@ -1111,6 +1118,7 @@ function suggestInstall(){
   openInstall();
 }
 $('#btnInstall').onclick=openInstall;
+setInterval(()=>{if(API.on&&entered&&!document.hidden)API.rpc('ping',{p_token:TOKEN,p_secs:60}).catch(()=>{});},60000);
 $('#mcard').addEventListener('click',e=>{if(e.target.closest('#instBtn'))openInstall();if(e.target.closest('#icsGo'))downloadICS();if(e.target.closest('#pwaAdd')&&deferredInstall){deferredInstall.prompt();}});
 if(MODE==='player')setupPWA();
 
@@ -1119,7 +1127,7 @@ async function bootBackend(){
   const lbl=$('#nameLbl');$('#names').classList.add('hidden');$('#go').disabled=true;lbl.textContent='Les lutins vérifient ton lien…';
   try{
     const [L,V]=await Promise.all([API.rpc('login',{p_token:TOKEN}),API.rpc('village',{p_token:TOKEN})]);
-    API.L=L;API.V=V;
+    API.L=L;API.V=V;API.rpc('am_organizer',{p_token:TOKEN}).then(r=>{if(r===true||r==='t'||r==='true'){const bo=$('#btnOrg');bo.classList.remove('hidden');bo.onclick=()=>{location.href=location.href.split('#')[0]+'#d='+encodeURIComponent(TOKEN);location.reload();};}}).catch(()=>{});
     TEAM=V.map(v=>({...(TEAM.find(t=>t.n===NS(v.name))||{n:NS(v.name),...randLookK()}),...(v.look||{}),n:NS(v.name)}));
     try{const F=await API.rpc('faces',{p_token:TOKEN});Object.assign(FACES,F);API.fv=-1;}catch(e){}
     paradeInit();
@@ -1128,8 +1136,11 @@ async function bootBackend(){
     (L.photos||[]).forEach(ph=>{photos[ph.door]={src:ph.data,shared:ph.shared,id:ph.id};});
     myPts=L.pts||0;{const e=$('#ptsN');if(e)e.textContent=myPts;}
     wh.ideas=L.ideas||{};wh.love=new Set(L.love||[]);wh.avoid=new Set(L.avoid||[]);wh.envie=L.envie||'';drawn=!!L.drawn;
-    lbl.innerHTML='Bonjour <b>'+esc(pm.n)+'</b> ! Personnalise ton bonhomme si tu veux.';
-    $('#custom').classList.remove('hidden');renderCustom();$('#go').disabled=false;
+    const back=!!(L.look&&L.look.kind);
+    if(back){lbl.innerHTML='Bienvenue dans le village, <b>'+esc(pm.n)+'</b> !<br><span style="font-weight:500;opacity:.9">Les autres t\'attendent. Pour changer de look, passe au <b>Dressing</b>.</span>';
+      $('#custom').classList.remove('hidden');$('#swatches').classList.add('hidden');renderPrevOnly();$('#go').textContent='Rejoindre le village';$('#go').disabled=false;}
+    else{lbl.innerHTML='Bonjour <b>'+esc(pm.n)+'</b> ! Personnalise ton bonhomme si tu veux.';
+      $('#custom').classList.remove('hidden');renderCustom();$('#go').disabled=false;}
     $('#introNote').textContent='Ce lien est le tien : merci de ne pas le transmettre. Active le son pour la musique.';
   }catch(e){lbl.innerHTML='<span style="color:#ffb4a8">Ce lien ne fonctionne pas ('+esc((e&&e.message)||'erreur')+'). Demande-en un nouveau à l\'organisatrice.</span>';}
 }
@@ -1285,6 +1296,10 @@ ADVENT[17]={k:'Défi photo',photo:true,t:'Photographie les plus belles illuminat
 ADVENT[19]={k:'Défi photo',photo:true,t:'Une pâtisserie de Noël en photo : bûche, biscuit, pain d\'épices, fait maison ou acheté. Bonus culture : en Provence, on sert traditionnellement treize desserts !'};
 if(!CFG.fx.photo)ADVENT.forEach((a,i)=>{if(a.photo){a.photo=false;a.defi=true;a.k='Défi';}});
 ADVENT[1].kw='neige';ADVENT[7].kw='sapin';ADVENT[12].kw='cadeau';ADVENT[18].kw='guirlande';
+const ADV_DEF=ADVENT.map(a=>({t:a.t,a:a.a}));
+const kwOf=a=>String(a||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[.!?]/g,'').trim().replace(/^(la|le|les|l'|un|une)\s*/,'').trim().split(/\s+/)[0]||'';
+function applyAdv(){const o=CFG.adv||{};Object.keys(o).forEach(k=>{const i=+k,a=ADVENT[i],v=o[k];if(!a||!v||i===23)return;if(typeof v.t==='string'&&v.t.trim())a.t=NS(v.t,400);if(a.kw&&typeof v.a==='string'&&v.a.trim()){a.a=NS(v.a,80);const w=kwOf(a.a);if(w)a.kw=w;}});}
+applyAdv();
 let demoNow=null;const advOpened=new Set();
 const photos={},doneDefi=new Set(),quizDone=new Set(),likesMine={};let myPts=0,pendingPhoto=null;
 const nowD=()=>demoNow||new Date();
@@ -1591,16 +1606,22 @@ function shopWar(){
   const draw=()=>{
     const need=['hd','nk','bk'].map(k=>tmp[k]).filter(id=>id&&ITEMS[id].p>0&&!ow.has(id));
     const sec=(k,t)=>`<div class="opt"><b>${t}</b><button class="chip ${!tmp[k]?'on':''}" data-it="${k}:">Aucun</button>${ACC[k].map(id=>{const it=ITEMS[id],own=it.p===0||ow.has(id);return `<button class="chip ${tmp[k]===id?'on':''}" data-it="${k}:${id}">${it.n}${own?'':' · '+it.p+' pts'}</button>`;}).join('')}</div>`;
+    const kd=kindOf(tmp),lbk=CHAR[kd].lb,lk=lookOf(tmp);
+    const persoHTML=`<details class="opt" style="display:block"><summary style="cursor:pointer;font-weight:700">Changer de personnage et de couleurs</summary>
+      <div class="kinds" style="margin-top:8px">${CHARS.map(x=>`<button class="kbtn ${x===kd?'on':''}" data-kd="${x}" aria-label="${CHAR[x].n}">${figSVG({...CHAR[x].def,kind:x,n:'',face:''})}<i>${CHAR[x].n}</i></button>`).join('')}</div>
+      ${FIELDS.filter(f=>lbk[f]).map(f=>`<div class="crow"><span>${lbk[f]}</span>${palOf(kd,f).map(v=>`<button class="sw ${lk[f]===v?'on':''}" data-cf="${f}" data-cv="${v}" style="background:${v}" aria-label="${lbk[f]}"></button>`).join('')}</div>`).join('')}</details>`;
     $('#panel').innerHTML=`<h2>Le Dressing</h2><p>Essaie les tenues dans la cabine, puis garde celle qui te plaît. Tu as <b>${bal()} point${bal()>1?'s':''}</b> à dépenser (ton rang au classement ne change pas).</p>
     <div class="ckwrap"><div class="fit">${figSVG(tmp)}</div></div>
-    <div class="opt"><b>Tenues</b>${OUTFITS.map(o=>`<button class="chip" data-out="${o.id}">${o.n}</button>`).join('')}</div>${sec('hd','Tête')}${sec('nk','Cou')}${sec('bk','Dos')}
+    ${persoHTML}<div class="opt"><b>Tenues</b>${OUTFITS.map(o=>`<button class="chip" data-out="${o.id}">${o.n}</button>`).join('')}</div>${sec('hd','Tête')}${sec('nk','Cou')}${sec('bk','Dos')}
     ${need.map(id=>`<div class="row"><button class="btn primary" data-buy="${id}" ${bal()>=ITEMS[id].p?'':'disabled'}>Acheter : ${ITEMS[id].n} (${ITEMS[id].p} pts)</button></div>`).join('')}
     ${need.some(id=>bal()<ITEMS[id].p)?'<p class="note">Pas assez de points pour le moment : le calendrier de l\'Avent, les jeux et les mots doux en rapportent !</p>':''}
     <div class="row"><button class="btn green" id="fitKeep" ${need.length?'disabled':''}>Garder cette tenue</button><button class="btn ghost" id="fitReset">Remettre ma tenue</button></div>`;
   };
   $('#panel').onclick=async e=>{
     const t=e.target;let b;
-    if(b=t.closest('[data-it]')){const p=b.dataset.it.split(':');if(p[1])tmp[p[0]]=p[1];else delete tmp[p[0]];draw();}
+    if(b=t.closest('[data-kd]')){const ks=b.dataset.kd,keep={n:tmp.n,face:tmp.face,glasses:tmp.glasses};['hd','nk','bk'].forEach(k=>{if(tmp[k])keep[k]=tmp[k];});tmp={...lookOf({kind:ks}),...keep};draw();const d=$('#panel details');if(d)d.open=true;}
+    else if(b=t.closest('[data-cf]')){tmp[b.dataset.cf]=b.dataset.cv;draw();const d=$('#panel details');if(d)d.open=true;}
+    else if(b=t.closest('[data-it]')){const p=b.dataset.it.split(':');if(p[1])tmp[p[0]]=p[1];else delete tmp[p[0]];draw();}
     else if(b=t.closest('[data-out]')){const o=OUTFITS.find(x=>x.id===b.dataset.out),src=o.c||CHAR[kindOf(tmp)].def;['coat','hat','scarf','acc'].forEach(f=>{if(HEXOK(src[f]))tmp[f]=src[f];});draw();}
     else if(b=t.closest('[data-buy]')){const id=b.dataset.buy,it=ITEMS[id];if(!it||bal()<it.p)return;b.disabled=true;
       try{if(API.on){const r=await API.rpc('buy_item',{p_token:TOKEN,p_item:id});mySpent=+r.spent||mySpent+it.p;}else mySpent+=it.p;ow.add(id);toast(`${it.n} acheté !`);sparkle(me.x,me.y-60,10,'#ffd35a');}catch(err){netErr(err);}
@@ -1862,7 +1883,7 @@ if(CFG.fx.shops)SHOPS.forEach((h,i)=>hot('shop'+i,()=>`Entrer : ${SHOP_INFO[i].n
 
 /* ---------- espace organisateur : assistant en 4 étapes ---------- */
 function initSetup(){
-  if(!(HP.get('o')||HP.get('c')))TEAM=[];
+  if(!(HP.get('o')||HP.get('c')||DASHTOK))TEAM=[];
   const S={step:0,max:0,base:location.href.split('#')[0],
     tpl:'Salut {prenom} ! Les lutins ont préparé une surprise pour l\'équipe : un Secret Santa dans un petit village de Noël interactif.\nVoici ton lien personnel (merci de ne pas le transmettre) : {lien}\nTu y trouveras ta lettre, quelques jeux, et tu pourras souffler tes idées aux lutins en toute discrétion. Ouverture des cadeaux {date}.{budget}'};
   const root=$('#setup'),body=$('#sBody'),foot=$('#sFoot'),STEPS=['Équipe','Règles','Ambiance','Invitations',CFG.created?'Tableau de bord':'Tirage'];
@@ -1870,16 +1891,16 @@ function initSetup(){
   const rtok=()=>{const a=new Uint8Array(18);crypto.getRandomValues(a);return [...a].map(x=>'abcdefghjkmnpqrstuvwxyz23456789'[x%31]).join('');};
   const ensureTok=()=>{TEAM.forEach(m=>{if(!m.tok)m.tok=rtok();});if(!CFG.admin)CFG.admin=rtok();};
   const srv=()=>!!(CFG.sb.url&&CFG.sb.key);
-  const sync=()=>{if(srv())ensureTok();try{history.replaceState(null,'','#o='+packCfg(true)+((CKEY&&!CFG.created)?'&n='+encodeURIComponent(CKEY):''));}catch(e){}};
+  const sync=()=>{if(DASHTOK)return;if(srv())ensureTok();try{history.replaceState(null,'','#o='+packCfg(true)+((CKEY&&!CFG.created)?'&n='+encodeURIComponent(CKEY):''));}catch(e){}};
   const randLook=()=>randLookK();
   const copy=async(txt,btn)=>{try{await navigator.clipboard.writeText(txt);}catch(e){const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(_){}t.remove();}
     if(btn){const o=btn.dataset.o||btn.textContent;btn.dataset.o=o;btn.textContent='Copié !';setTimeout(()=>btn.textContent=o,1400);}};
   const teamErr=()=>{const ns=TEAM.map(m=>m.n.trim());if(ns.some(n=>!n))return 'Un prénom est vide.';if(new Set(ns.map(n=>n.toLowerCase())).size<ns.length)return 'Deux joueurs ont le même prénom : ajoute une initiale pour les distinguer.';if(ns.length<3)return 'Il faut au moins 3 joueurs pour un Secret Santa.';if(ns.length>60)return 'Au-delà de 60 joueurs, le village devient illisible : réduis la liste.';return '';};
   const fmtD=d=>d.toLocaleDateString('fr-FR',{day:'numeric',month:'long'});
   const link=i=>{if(srv()){ensureTok();return S.base+'#k='+TEAM[i].tok;}return S.base+'#c='+packCfg(false)+'&p='+i;};
-  const srvCfg=()=>{const o=cfgObj(false);delete o.s;delete o.a;delete o.m;return o;};
+  const srvCfg=()=>{const o=cfgObj(false);delete o.s;delete o.a;delete o.m;delete o.og;return o;};
   const msg=i=>S.tpl.replace(/\{prenom\}/g,TEAM[i].n).replace(/\{lien\}/g,link(i)).replace(/\{date\}/g,OPENING.label).replace(/\{budget\}/g,CFG.budget?' Budget : '+CFG.budget+'.':'');
-  const rowsHTML=()=>TEAM.map((m,i)=>`<div class="srow"><div class="sav">${figSVG(m)}</div><input class="sIn" data-i="${i}" value="${esc(m.n)}" maxlength="20" aria-label="Prénom"><button class="btn ghost sm" data-look="${i}">Changer le look</button><button class="btn ghost sm" data-del="${i}" aria-label="Retirer ${esc(m.n)}">×</button></div>`).join('');
+  const rowsHTML=()=>TEAM.map((m,i)=>`<div class="srow"><div class="sav">${figSVG(m)}</div><input class="sIn" data-i="${i}" value="${esc(m.n)}" maxlength="20" aria-label="Prénom"><label class="orgl" title="Cette personne retrouvera l'espace organisateur depuis son lien joueur"><input type="radio" name="orgme" data-org="${i}" ${m.org?'checked':''}> Organisateur</label><button class="btn ghost sm" data-look="${i}">Changer le look</button><button class="btn ghost sm" data-del="${i}" aria-label="Retirer ${esc(m.n)}">×</button></div>`).join('');
   const prevHTML=()=>{const a=new Date(CFG.date+'T12:00:00');a.setDate(a.getDate()-23);
     return `<b>Aperçu de la lettre :</b> « …les cadeaux s'ouvriront tous ensemble <b>${esc(OPENING.label)}</b>.${CFG.budget?' Le budget est de <b>'+esc(CFG.budget)+'</b>.':''} »${CFG.welcome?`<br><i>${esc(CFG.welcome)}</i>`:''}<br><span style="opacity:.75">Calendrier de l'Avent : 24 portes, du ${fmtD(a)} au ${fmtD(new Date(CFG.date+'T12:00:00'))}.</span>`;};
   const FX=[
@@ -1892,8 +1913,31 @@ function initSetup(){
   const endPeek=()=>{clearTimeout(peekT);if(peekUndo)peekUndo();peekUndo=null;root.classList.remove('peek');$('#peekBar').classList.add('hidden');};
   const peek=(fn,undo,ms)=>{root.classList.add('peek');$('#peekBar').classList.remove('hidden');fn();peekUndo=undo;peekT=setTimeout(endPeek,ms);};
   $('#peekBar').onclick=endPeek;
+
+  const fmtT=s=>{s=+s||0;if(s<60)return '—';const m=Math.round(s/60);return m<60?m+' min':Math.floor(m/60)+' h '+String(m%60).padStart(2,'0');};
+  const fmtLast=t=>{if(!t)return 'jamais';const d=new Date(t),n=new Date(),dd=Math.round((new Date(n.getFullYear(),n.getMonth(),n.getDate())-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/864e5);return dd<=0?'aujourd\'hui':dd===1?'hier':'il y a '+dd+' j';};
+  function dashHTML(){
+    const D=S.dash;
+    if(!D)return `<h2>Tableau de bord de ma partie</h2><p class="sNote">Chargement du suivi…</p>`;
+    if(D.err){const refused=/refus/i.test(D.err);return `<h2>Tableau de bord de ma partie</h2><div class="sWarn">${esc(D.err)}${refused?' : le code organisateur de ce lien ne correspond pas à celui de ta partie.':''}</div>${refused?`<label class="lab">Colle ici ton code organisateur (celui de ton lien « espace admin »)<input type="text" id="sAdmCode" placeholder="adm-…" autocomplete="off"></label><div class="sTop"><button class="btn primary sm" id="sAdmGo">Valider le code</button></div>`:'<div class="sTop"><button class="btn ghost sm" id="sStat">Réessayer</button></div>'}`;}
+    const P=D.players||[],yes=P.filter(p=>p.part===true),no=P.filter(p=>p.part===false),pend=P.filter(p=>p.part==null);
+    const pts=P.reduce((a,p)=>a+(+p.pts||0),0),secs=P.reduce((a,p)=>a+(+p.secs||0),0),act=P.filter(p=>p.last&&fmtLast(p.last)==='aujourd\'hui').length,rdy=P.filter(p=>p.ready).length;
+    const row=p=>`<tr><td><b>${esc(p.name)}</b></td><td>${p.part===true?'<span style="color:#2f6b4f;font-weight:700">Oui</span>':p.part===false?'<span style="color:#a02418;font-weight:700">Non</span>':'<span style="opacity:.7">En attente</span>'}</td><td>${p.ready?'✓':''}</td><td>${p.pts}</td><td>${p.visits}</td><td>${fmtT(p.secs)}</td><td>${fmtLast(p.last)}</td></tr>`;
+    const order=[...yes,...pend,...no];
+    return `<h2>Tableau de bord de ma partie</h2><div class="sTop"><label class="lab" style="margin:0;flex:1;min-width:220px">Nom de la partie<input type="text" id="sTitle" value="${esc(CFG.title||'')}" placeholder="ex. Secret Santa équipe Produit" maxlength="60"></label><button class="btn ghost sm" id="sTitleSave">Enregistrer le nom</button><button class="btn ghost sm" id="sStat">Actualiser</button></div><div class="sErr" id="sTitleMsg"></div>
+    <div class="sPrev stats"><div class="stile"><b>${yes.length}/${P.length}</b><span>ont dit oui</span></div><div class="stile w"><b>${pend.length}</b><span>en attente</span></div><div class="stile"><b>${no.length}</b><span>déclinent</span></div><div class="stile"><b>${rdy}</b><span>cadeaux prêts</span></div><div class="stile"><b>${pts}</b><span>points de l'équipe</span></div><div class="stile"><b>${fmtT(secs)}</b><span>passés au village</span></div><div class="stile"><b>${act}</b><span>actifs aujourd'hui</span></div></div>
+    <div style="overflow-x:auto"><table class="dtab"><thead><tr><th>Joueur</th><th>Participe</th><th>Cadeau</th><th>Points</th><th>Jours</th><th>Temps</th><th>Dernière visite</th></tr></thead><tbody>${order.map(row).join('')}</tbody></table></div>
+    <p class="sNote">Temps = temps passé au village, compté depuis la dernière mise à jour. Jours = nombre de jours de visite.</p>`;
+  }
+  function advHTML(){
+    const tmr=new Date();tmr.setHours(0,0,0,0);tmr.setDate(tmr.getDate()+1);
+    const rows=ADVENT.map((a,i)=>{const d=new Date(ADV_START);d.setDate(d.getDate()+i);const isT=d.getTime()===tmr.getTime(),ed=i<23,ch=(CFG.adv||{})[i];
+      return `<div class="arow${isT?' tmr':''}"><div class="ad"><b>${fmtD(d)}</b>${isT?' <em>demain</em>':''}<small>${esc(a.k)}${a.photo?' (photo)':a.defi?' (défi)':a.kw?' (devinette)':''}${ch?' · modifiée':''}</small></div>${ed?`<textarea data-adv="${i}" maxlength="400">${esc(a.t)}</textarea>${a.kw?`<input data-adva="${i}" maxlength="80" value="${esc(a.a||'')}" placeholder="Réponse attendue">`:''}`:`<div class="adt">${esc(a.t)}</div>`}</div>`;}).join('');
+    return `<details class="sTool" style="margin:14px 0"><summary><b>Calendrier de l'Avent : voir et modifier ce que les joueurs vont recevoir</b></summary><p class="sNote">Les 24 portes, jour par jour. Modifie un texte si ça ne te plaît pas, puis enregistre : les joueurs le voient au prochain chargement. Les portes déjà ouvertes par un joueur gardent leurs points.</p>${rows}<div class="sTop"><button class="btn primary sm" id="sAdvSave">Enregistrer et envoyer aux joueurs</button><button class="btn ghost sm" id="sAdvReset">Revenir aux textes d'origine</button></div><div class="sErr" id="sAdvMsg"></div></details>`;
+  }
+  const loadDash=()=>{S.stat=null;S.dash=null;render();adm('admin_status',{p_admin:CFG.admin}).then(r=>{S.stat=r;render();}).catch(()=>{});adm('admin_dashboard',{p_admin:CFG.admin}).then(r=>{S.dash=r;render();}).catch(e=>{S.dash={err:e.message};render();});};
   const R={
-    0:()=>`<h2>Qui joue cette année ?</h2><p class="sNote">Ajoute chaque personne de l'équipe, toi comprise. Chacune aura son bonhomme dans le village, que l'on peut personnaliser ensuite.</p>
+    0:()=>`<h2>Qui joue cette année ?</h2><p class="sNote">Ajoute chaque personne de l'équipe, toi comprise. Chacune aura son bonhomme dans le village, que l'on peut personnaliser ensuite. <b>Coche « Organisateur » devant ton prénom</b> : tu retrouveras ton espace organisateur directement depuis ton lien joueur.</p>
       <ol class="flow"><li class="me">Tu prépares et crées ta partie</li><li>Tu invites ton équipe</li><li>Chacun répond et note ses idées</li><li>Tu lances le tirage</li><li>Ils jouent jusqu'au jour J</li></ol>
       ${(srv()&&!CFG.created&&!CKEY)?`<div class="sWarn">Pour créer une vraie partie, tu auras besoin du <b>mot de code</b> envoyé avec la vidéo (il se saisit à l'étape Invitations). Tu peux déjà préparer ton équipe et essayer la démo.</div>`:''}
       ${CFG.created?`<div class="sPrev">Ta partie est déjà créée sur le serveur : tu peux <b>ajouter</b> des joueurs (étape 4, « Mettre à jour la partie »), mais pas en retirer ni les renommer.</div>`:''}
@@ -1904,6 +1948,7 @@ function initSetup(){
       <div class="sErr" id="sErr"></div>`,
     1:()=>`<h2>Les règles du jeu</h2><p class="sNote">Ces informations apparaissent dans la lettre que chacun reçoit.</p>
       <div class="sGrid"><div class="sSec full">Quand</div><label>Date d'ouverture des cadeaux<input type="date" id="sDate" value="${CFG.date}"></label><label>Heure<input type="time" id="sTime" value="${CFG.time}"></label>
+      <label class="full">Nom de la partie (visible par l'administrateur du village)<input type="text" id="sTitle" value="${esc(CFG.title||'')}" placeholder="ex. Secret Santa équipe Produit" maxlength="60"></label>
       <label class="full">Occasion (optionnel)<input type="text" id="sOcc" value="${esc(CFG.occasion)}" placeholder="ex. pendant la soirée de Noël" maxlength="60"></label>
       <div class="sSec full">Détails (tous optionnels)</div><label class="full">Ville du village, pour la météo en direct<input type="text" id="sCity" value="${esc(CFG.city)}" placeholder="ex. Lyon" maxlength="40"></label>
       <label class="full">Budget par cadeau (optionnel)<input type="text" id="sBud" value="${esc(CFG.budget)}" placeholder="ex. 15 à 20 €" maxlength="30"></label>
@@ -1914,14 +1959,13 @@ function initSetup(){
       <div class="sSec">Aperçu rapide</div><p class="sNote">Affiche le vrai village quelques secondes, puis revient ici.</p>
       <div class="peekRow"><button class="btn ghost sm" data-peek="sleigh">Voir le traîneau du Père Noël</button><button class="btn ghost sm" data-peek="night">Voir le village de nuit</button><button class="btn ghost sm" data-peek="snow">Voir une grosse chute de neige</button></div>`,
     4:()=>{if(!srv()||!CFG.created)return `<h2>Le tirage au sort</h2><div class="sWarn">Le tirage réel demande une partie créée sur le serveur de l'équipe (créée à l'étape Invitations, avec le mot de code). En démo, le tirage est simulé par le bouton « Coulisses » du village.</div>`;
-      const st=S.stat;return `<h2>${st&&st.drawn?'Tableau de bord de ma partie':'Mon tableau de bord : le tirage au sort'}</h2><p class="sNote">Il se fait sur le serveur. Les exclusions (« moins à l'aise avec ») sont toujours respectées et les « j'adorerais offrir à » sont maximisés. Cet écran n'affiche jamais les paires.</p>
-      <div class="sTop"><button class="btn ghost sm" id="sStat">Actualiser le suivi</button></div>
+      const st=S.stat;return `${dashHTML()}${advHTML()}<h2>${st&&st.drawn?'Le tirage au sort':'Le tirage au sort'}</h2><p class="sNote">Il se fait sur le serveur. Les exclusions (« moins à l'aise avec ») sont toujours respectées et les « j'adorerais offrir à » sont maximisés. Cet écran n'affiche jamais les paires.</p>
       <div class="sPrev stats">${st?(st.err?`<span style="color:#a02418">${esc(st.err)}</span>`:`<div class="stile"><b>${st.yes}</b><span>participent</span></div><div class="stile"><b>${st.no}</b><span>déclinent</span></div><div class="stile w"><b>${st.pending}</b><span>sans réponse</span></div><div class="stile"><b>${st.ready}</b><span>cadeaux prêts</span></div>`):'<span style="grid-column:1/-1;font-size:13.5px">Clique sur « Actualiser le suivi » pour voir les réponses.</span>'}</div>${st&&!st.err?`${st.pending?`<div class="sWarn">En attente de réponse : ${st.pending_names.map(esc).join(', ')}. Ils seront exclus du tirage s'ils ne répondent pas avant.</div>`:'<div class="sPrev">Tout le monde a répondu : tu peux lancer le tirage.</div>'}${st.drawn?'<div class="sPrev"><b>Le tirage a eu lieu.</b></div>':''}`:''}
             <button class="btn primary bigcta" id="sDraw">${st&&st.drawn?'Refaire le tirage':'Lancer le tirage'}</button>
       <div class="sErr" id="sErr" style="color:${S.drawOk?'#2f6b4f':'#a02418'}">${esc(S.drawMsg||'')}</div>
       <p class="sNote">Chaque joueur reçoit sa lettre (la personne à qui il offre, avec les idées soufflées) à sa prochaine visite, ou par notification s'il l'a autorisée. Pense à envoyer un message d'équipe « le tirage est fait ». Refaire le tirage remplace les paires existantes.</p>
       <div class="sSec">Outils</div>
-      <div class="sTop"><button class="btn ghost sm" id="sPush">Mettre à jour la partie</button> <small style="opacity:.75">À faire si tu changes la date, le budget, le mot d'accueil ou les animations.</small></div>
+      ${DASHTOK?'':`<div class="sTop"><button class="btn ghost sm" id="sPush">Mettre à jour la partie</button> <small style="opacity:.75">À faire si tu changes la date, le budget, le mot d'accueil ou les animations.</small></div>`}
       <div class="instl sTool"><b>Répétition avant l'envoi</b><br>Ouvre un lien joueur (étape Invitations) pour jouer chaque rôle et voir les lettres. Ensuite, remets tout à zéro : les liens déjà générés restent valables.
         <div class="sTop"><button class="btn ghost sm" id="sOpen2">Tester l'ouverture dans 2 minutes</button><button class="btn ghost sm" id="sOpenSync">Remettre la vraie date d'ouverture</button><button class="btn primary sm" id="sReset">Remettre tout à zéro</button></div></div>
       <div class="sTop" style="margin-top:14px"><button class="btn ghost sm" id="sDel">Supprimer définitivement ma partie</button> <small style="opacity:.75">À faire après l'événement pour effacer photos et réponses.</small></div>`;},
@@ -1951,9 +1995,10 @@ function initSetup(){
       return `<h2>Envoie les liens personnels</h2><p class="sNote">Mode démo : le tirage est simulé et chaque lien contient toute la configuration. Pour un vrai tirage secret, ouvre le village depuis son adresse publique (serveur de l'équipe).</p>${links}${inst}`;
     }};
   const render=()=>{
-    $('#sSteps').innerHTML=STEPS.map((t,i)=>`<button data-go="${i}" class="${i===S.step?'on':i<S.step?'ok':''}" ${i>S.max?'disabled':''} ${i===S.step?'aria-current="step"':''}><i>${i<S.step?'✓':i+1}</i><span>${t}</span></button>`).join('');
+    $('#sSteps').innerHTML=STEPS.map((t,i)=>`<button data-go="${i}" class="${i===S.step?'on':i<S.step?'ok':''}" ${(i>S.max||(DASHTOK&&i<4))?'disabled':''} ${i===S.step?'aria-current="step"':''}><i>${i<S.step?'✓':i+1}</i><span>${t}</span></button>`).join('');
     body.innerHTML=R[S.step]();body.scrollTop=0;
     const gate=S.step===3&&srv()&&!CFG.created;
+    if(DASHTOK){foot.innerHTML='<span></span><div class="grp"><button class="btn primary" id="sToVillage">Retourner au village</button></div>';return;}
     foot.innerHTML=(S.step===0?'<span></span>':'<button class="btn ghost" id="sBack">Retour</button>')+'<div class="grp">'+(S.step>=2&&S.step<4?'<button class="btn ghost" id="sTest">Voir comme un joueur</button>':'')+(S.step<4?(gate?'':'<button class="btn primary" id="sNext">Continuer</button>'):'<button class="btn primary" id="sTest">Voir comme un joueur</button>')+'</div>';
   };
   const setErr=t=>{const e=$('#sErr');if(e)e.textContent=t;};
@@ -1978,8 +2023,8 @@ function initSetup(){
     else if(b.dataset.cm!=null)copy(msg(+b.dataset.cm),b);
     else if(b.id==='sAllMsg')copy(TEAM.map((m,i)=>m.n+'\n'+msg(i)).join('\n\n---\n\n'),b);
     else if(b.id==='sOrg'||b.id==='sOrg2')copy(S.base+'#o='+packCfg(true),b);
-    else if(b.id==='sCreate'){const code=(CKEY||(($('#sCode')||{}).value||'')).trim().toLowerCase();if(!code){setErr('Saisis le mot de code pour créer une partie.');return;}const e0=teamErr();if(e0){setErr(e0);return;}ensureTok();b.disabled=true;setErr('Création de la partie…');
-      API.rpc('create_game',{p_code:code,p_admin:CFG.admin,p_opening:new Date(CFG.date+'T'+(CFG.time||'09:00')).toISOString(),p_players:TEAM.map(m=>({name:m.n.trim(),token:m.tok})),p_config:srvCfg()}).then(()=>{CFG.created=1;S.drawOk=true;S.drawMsg='Partie créée ! Tes liens sont prêts ci-dessous.';sync();render();}).catch(e=>{b.disabled=false;setErr(e.message||'Erreur');});}
+    else if(b.id==='sCreate'){if(!TEAM.some(m=>m.org)&&!confirm('Aucun organisateur n\'est désigné dans l\'équipe (case « Organisateur », étape 1). Sans cela, ton espace organisateur ne sera accessible qu\'avec ton lien actuel. Créer quand même ?'))return;const code=(CKEY||(($('#sCode')||{}).value||'')).trim().toLowerCase();if(!code){setErr('Saisis le mot de code pour créer une partie.');return;}const e0=teamErr();if(e0){setErr(e0);return;}ensureTok();b.disabled=true;setErr('Création de la partie…');
+      API.rpc('create_game',{p_code:code,p_admin:CFG.admin,p_opening:new Date(CFG.date+'T'+(CFG.time||'09:00')).toISOString(),p_players:TEAM.map(m=>({name:m.n.trim(),token:m.tok})),p_config:srvCfg()}).then(()=>{CFG.created=1;S.drawOk=true;S.drawMsg='Partie créée ! Tes liens sont prêts ci-dessous.';sync();render();const og=TEAM.find(m=>m.org);if(og)adm('claim_organizer',{p_admin:CFG.admin,p_name:og.n.trim()}).catch(()=>{});}).catch(e=>{b.disabled=false;setErr(e.message||'Erreur');});}
     else if(b.id==='sPush'){const e0=teamErr();if(e0){S.drawOk=false;S.drawMsg=e0;render();return;}ensureTok();const iso=()=>new Date(CFG.date+'T'+(CFG.time||'09:00')).toISOString();
       adm('admin_players',{p_admin:CFG.admin}).then(names=>{const have=new Set(names.map(x=>x.toLowerCase()));const add=TEAM.filter(m=>!have.has(m.n.trim().toLowerCase())).map(m=>({name:m.n.trim(),token:m.tok}));return (add.length?adm('add_players',{p_admin:CFG.admin,p_players:add}):Promise.resolve()).then(()=>adm('set_config',{p_admin:CFG.admin,p_config:srvCfg()})).then(()=>adm('set_opening',{p_admin:CFG.admin,p_opening:iso()})).then(()=>{S.drawOk=true;S.drawMsg='Partie mise à jour'+(add.length?' ('+add.length+' joueur'+(add.length>1?'s':'')+' ajouté'+(add.length>1?'s':'')+')':'')+'.';render();});}).catch(e=>{S.drawOk=false;S.drawMsg=e.message;render();});}
     else if(b.dataset.cr!=null){const i=+b.dataset.cr;if(!confirm('Générer un nouveau lien pour '+TEAM[i].n+' ? L\'ancien lien cessera de fonctionner.'))return;const nt=rtok();adm('rotate_token',{p_admin:CFG.admin,p_name:TEAM[i].n.trim(),p_new:nt}).then(()=>{TEAM[i].tok=nt;sync();S.drawOk=true;S.drawMsg='Nouveau lien généré pour '+TEAM[i].n+'. Ton lien organisateur a changé : recopie-le.';render();}).catch(e=>{S.drawOk=false;S.drawMsg=e.message;render();});}
@@ -1989,20 +2034,26 @@ function initSetup(){
     else if(b.id==='sOpen2'){adm('set_opening',{p_admin:CFG.admin,p_opening:new Date(Date.now()+120000).toISOString()}).then(()=>{S.drawOk=true;S.drawMsg='Ouverture simulée dans 2 minutes. Pense à remettre la vraie date ensuite.';render();}).catch(e=>{S.drawOk=false;S.drawMsg=e.message;render();});}
     else if(b.id==='sOpenSync'){adm('set_opening',{p_admin:CFG.admin,p_opening:new Date(CFG.date+'T'+(CFG.time||'09:00')).toISOString()}).then(()=>{S.drawOk=true;S.drawMsg='Date d\'ouverture réelle rétablie : '+OPENING.label+'.';render();}).catch(e=>{S.drawOk=false;S.drawMsg=e.message;render();});}
     else if(b.id==='sReset'){const w=prompt('Cette action efface toutes les réponses, le tirage, les points, les messages et les photos. Les joueurs et leurs liens sont conservés.\n\nTape REMETTRE pour confirmer.');if(w!=='REMETTRE')return;adm('reset_event',{p_admin:CFG.admin}).then(()=>adm('set_opening',{p_admin:CFG.admin,p_opening:new Date(CFG.date+'T'+(CFG.time||'09:00')).toISOString()})).then(()=>adm('admin_status',{p_admin:CFG.admin})).then(r=>{S.stat=r;S.drawOk=true;S.drawMsg='Tout est remis à zéro : les liens sont prêts à être envoyés.';render();}).catch(e=>{S.drawOk=false;S.drawMsg=e.message;render();});}
-    else if(b.id==='sStat'){S.stat=null;adm('admin_status',{p_admin:CFG.admin}).then(r=>{S.stat=r;render();}).catch(e=>{S.stat={err:e.message};render();});}
+    else if(b.id==='sToVillage'){location.href=S.base+'#k='+encodeURIComponent(DASHTOK);location.reload();}
+    else if(b.id==='sTitleSave'){adm('set_config',{p_admin:CFG.admin,p_config:srvCfg()}).then(()=>{const m=$('#sTitleMsg');m.style.color='#2f6b4f';m.textContent='Nom enregistré.';}).catch(e=>{const m=$('#sTitleMsg');m.style.color='#a02418';m.textContent=e.message;});}
+    else if(b.id==='sStat'){loadDash();}
+    else if(b.id==='sAdmGo'){const v=($('#sAdmCode')||{}).value||'';if(v.trim().length<8)return;CFG.admin=v.trim();sync();loadDash();}
+    else if(b.id==='sAdvSave'){const o={};$$('[data-adv]').forEach(t=>{const i=+t.dataset.adv,v=t.value.trim(),an=$('[data-adva="'+i+'"]'),av=an?an.value.trim():undefined;if(v&&(v!==ADV_DEF[i].t||(av!==undefined&&av!==ADV_DEF[i].a))){o[i]={t:v};if(av)o[i].a=av;}});CFG.adv=o;sync();adm('set_config',{p_admin:CFG.admin,p_config:srvCfg()}).then(()=>{$('#sAdvMsg').style.color='#2f6b4f';$('#sAdvMsg').textContent='Enregistré : les joueurs verront ces textes à leur prochain chargement.';}).catch(e=>{$('#sAdvMsg').style.color='#a02418';$('#sAdvMsg').textContent=e.message;});}
+    else if(b.id==='sAdvReset'){if(!confirm('Revenir aux textes d\'origine pour toutes les portes ?'))return;CFG.adv={};sync();adm('set_config',{p_admin:CFG.admin,p_config:srvCfg()}).then(()=>location.reload()).catch(e=>alert(e.message));}
     else if(b.id==='sDraw'){const redo=S.stat&&S.stat.drawn;if(redo&&!confirm('Refaire le tirage remplace les paires existantes. Continuer ?'))return;adm('run_draw',{p_admin:CFG.admin,p_force:!!redo}).then(r=>{S.drawOk=r.ok;S.drawMsg=r.ok?`Tirage effectué : ${r.participants} participants, ${r.love_matches} souhait${r.love_matches>1?'s':''} « j'adorerais offrir à » exaucé${r.love_matches>1?'s':''}.`:r.reason;return adm('admin_status',{p_admin:CFG.admin});}).then(r=>{S.stat=r;render();}).catch(e=>{S.drawOk=false;S.drawMsg=e.message;render();});}
     else if(b.id==='sCsv'){const csv='﻿Prénom;Lien\n'+TEAM.map((m,i)=>`${m.n};${link(i)}`).join('\n');try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='secret-santa-liens.csv';document.body.appendChild(a);a.click();a.remove();}catch(err){}copy(csv,null);b.textContent='Exporté (et copié)';setTimeout(()=>b.textContent='Exporter en CSV',1600);}
   });
   const adm=(fn,a)=>API.rpc(fn,a);
   function addOne(){const i=$('#sAdd'),n=i.value.trim();if(!n)return;if(TEAM.length>=60){setErr('60 joueurs au maximum.');return;}if(TEAM.some(x=>x.n.toLowerCase()===n.toLowerCase())){setErr('Ce prénom existe déjà.');return;}TEAM.push({n,...randLook()});i.value='';$('#sRows').innerHTML=rowsHTML();$('#sCount').textContent=TEAM.length;setErr('');sync();$('#sRows').scrollTop=1e5;i.focus();}
   root.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='sAdd')addOne();});
+  root.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.org!=null){TEAM.forEach((m,i)=>{m.org=(i===+t.dataset.org);});sync();}});
   root.addEventListener('input',e=>{const t=e.target;
     if(t.dataset.i!=null){TEAM[+t.dataset.i].n=t.value;setErr('');sync();}
-    else if(t.id==='sDate'||t.id==='sTime'||t.id==='sOcc'||t.id==='sCity'||t.id==='sBud'||t.id==='sWel'){if(t.id==='sDate'&&t.value)CFG.date=t.value;if(t.id==='sTime'&&t.value)CFG.time=t.value;if(t.id==='sOcc')CFG.occasion=t.value.trim();if(t.id==='sCity')CFG.city=t.value.trim();if(t.id==='sBud')CFG.budget=t.value.trim();if(t.id==='sWel')CFG.welcome=t.value.trim();syncOpening();$('#sPrev').innerHTML=prevHTML();sync();}
+    else if(t.id==='sDate'||t.id==='sTime'||t.id==='sOcc'||t.id==='sTitle'||t.id==='sCity'||t.id==='sBud'||t.id==='sWel'){if(t.id==='sDate'&&t.value)CFG.date=t.value;if(t.id==='sTime'&&t.value)CFG.time=t.value;if(t.id==='sOcc')CFG.occasion=t.value.trim();if(t.id==='sTitle')CFG.title=t.value.trim();if(t.id==='sCity')CFG.city=t.value.trim();if(t.id==='sBud')CFG.budget=t.value.trim();if(t.id==='sWel')CFG.welcome=t.value.trim();syncOpening();$('#sPrev').innerHTML=prevHTML();sync();}
     else if(t.id==='sBase')S.base=t.value.trim()||S.base;
     else if(t.id==='sSbUrl'||t.id==='sSbKey'){if(t.id==='sSbUrl')CFG.sb.url=t.value.trim();else CFG.sb.key=t.value.trim();sync();}
     else if(t.id==='sTpl')S.tpl=t.value;});
-  if(srv()&&CFG.created){S.step=4;S.max=4;adm('admin_status',{p_admin:CFG.admin}).then(r=>{S.stat=r;render();}).catch(e=>{S.stat={err:e.message};render();});}
+  if(srv()&&CFG.created){S.step=4;S.max=4;loadDash();}
   render();
 }
 </script>

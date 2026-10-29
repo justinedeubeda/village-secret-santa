@@ -15,11 +15,11 @@
       $('#tot').replaceChildren(...[[G.length,'parties'],[tp,'joueurs'],[G.filter(g=>g.drawn).length,'tirages lancés']].map(([n,l])=>{const d=mk('div');d.append(mk('b','',n),l);return d;}));
       if(!G.length)L.append(mk('p','sub','Aucune partie pour le moment.'));
       G.forEach(g=>{
-        const r=mk('div','row'),top=mk('div','top'),t=mk('div','t','Partie n°'+g.id+(g.occasion?' · '+g.occasion:'')),b=mk('button','','Supprimer');
+        const r=mk('div','row'),top=mk('div','top'),t=mk('div','t',(g.title||('Partie n°'+g.id))+(g.title?' (n°'+g.id+')':'')+(g.occasion?' · '+g.occasion:'')),b=mk('button','','Supprimer');
         b.onclick=async()=>{if(prompt('Supprimer définitivement la partie n°'+g.id+' ('+g.players+' joueurs) ? Tape SUPPRIMER pour confirmer.')!=='SUPPRIMER')return;try{await rpc('admin_delete_game',{p_secret:A,p_id:g.id});load();}catch(e){$('#err').textContent=e.message;}};
         top.append(t,b);
         const m=mk('div','m');m.append(mk('span','pill','créée le '+fd(g.created)),mk('span','pill','ouverture le '+fd(g.opening)),mk('span','pill'+(g.drawn?' ok':''),g.drawn?'tirage lancé':'tirage non lancé'),mk('span','pill',g.answered+'/'+g.players+' réponses'),mk('span','pill',g.ready+' cadeaux prêts'));
-        r.append(top,m,mk('div','m',g.names.join(', ')));L.append(r);
+        r.append(top,m,mk('div','m','Organisation : '+(g.organizer||'non désignée')+' · '+g.names.join(', ')));L.append(r);
       });
     }catch(e){$('#err').textContent='Impossible de charger : '+e.message;}
   }
