@@ -4,7 +4,187 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f1b3d"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Village"><meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Village de Noël – Secret Santa</title>
+<title>Secret Santa – Village de Noël : jeu de Noël en équipe, gratuit</title>
+<meta name="description" content="Secret Santa – Village de Noël : un village sous la neige, un calendrier de l’Avent, des mini-jeux et un tirage au sort secret pour votre équipe. Gratuit, sans compte pour les joueurs.">
+<link rel="canonical" href="https://justinedeubeda.github.io/village-secret-santa/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta property="og:site_name" content="Secret Santa – Village de Noël">
+<meta property="og:title" content="Secret Santa – Village de Noël : le jeu de Noël de votre équipe">
+<meta property="og:description" content="Un village, un calendrier de l’Avent et un tirage secret pour votre équipe. Gratuit.">
+<meta property="og:url" content="https://justinedeubeda.github.io/village-secret-santa/"><meta property="og:image" content="https://justinedeubeda.github.io/village-secret-santa/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script>try{if(!location.hash||location.hash==='#')document.documentElement.className+=' landing'}catch(e){}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Secret Santa – Village de Noël", "url": "https://justinedeubeda.github.io/village-secret-santa/", "description": "Un jeu de Noël pour les équipes : un village animé, un calendrier de l’Avent, des mini-jeux et un tirage au sort Secret Santa.", "applicationCategory": "GameApplication", "operatingSystem": "Web", "inLanguage": "fr", "image": "https://justinedeubeda.github.io/village-secret-santa/img/og.jpg", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Est-ce que c’est gratuit ?", "acceptedAnswer": {"@type": "Answer", "text": "Oui, le village est gratuit pour cette saison. Les joueurs n’ont aucun compte à créer : chacun reçoit un lien personnel."}}, {"@type": "Question", "name": "Faut-il créer un compte pour jouer ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. L’organisateur ajoute les prénoms, puis chaque joueur reçoit un lien personnel. Il suffit de l’ouvrir dans le navigateur, sur ordinateur ou sur mobile."}}, {"@type": "Question", "name": "Combien de personnes faut-il pour un Secret Santa ?", "acceptedAnswer": {"@type": "Answer", "text": "Il faut au moins 3 joueurs pour que le tirage au sort ait un sens. Il n’y a pas d’autre minimum : l’ambiance est la même pour une équipe de 5 ou de 30."}}, {"@type": "Question", "name": "L’organisateur connaît-il qui offre à qui ?", "acceptedAnswer": {"@type": "Answer", "text": "Non, pas dans l’application. L’écran du tirage n’affiche jamais les paires, et chaque joueur ne découvre que la personne à qui il offre, dans sa propre lettre."}}, {"@type": "Question", "name": "Et si quelqu’un ne veut pas participer ?", "acceptedAnswer": {"@type": "Answer", "text": "Chaque joueur répond à l’invitation par « Oui, je participe » ou « Pas cette année ». Seuls ceux qui participent entrent dans le tirage."}}]}</script>
+<style>
+@font-face{font-family:"Fraunces";font-weight:600;font-style:normal;font-display:swap;src:url(fonts/fraunces-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Fraunces";font-weight:700;font-style:normal;font-display:swap;src:url(fonts/fraunces-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Nunito";font-weight:400;font-style:normal;font-display:swap;src:url(fonts/nunito-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Nunito";font-weight:700;font-style:normal;font-display:swap;src:url(fonts/nunito-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Nunito";font-weight:800;font-style:normal;font-display:swap;src:url(fonts/nunito-latin-800-normal.woff2) format("woff2")}
+.lp{font:18px/1.65 "Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#2b2320;background:#fbf6ea;-webkit-text-size-adjust:100%}
+.lp *{box-sizing:border-box}
+.lp img,.lp video{max-width:100%;height:auto;display:block}
+.lp a{color:#a23224}
+.lp .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.lp h1,.lp h2,.lp h3{font-family:"Fraunces",Georgia,serif;font-weight:700;line-height:1.15;margin:0 0 .5em;color:#7a2118;letter-spacing:-.01em}
+.lp h1{font-size:clamp(34px,5.4vw,56px)}
+.lp h2{font-size:clamp(27px,3.6vw,38px);margin-top:1.2em}
+.lp h3{font-size:21px;color:#3b2a1e;font-weight:600}
+.lp p{margin:0 0 1em}
+.lp .top{background:rgba(10,18,48,.96);color:#fff;position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
+.lp .top .wrap{display:flex;align-items:center;gap:18px;padding-top:10px;padding-bottom:10px}
+.lp .brand{font-family:"Fraunces",Georgia,serif;font-weight:700;font-size:20px;color:#fff;text-decoration:none;margin-right:auto;white-space:nowrap}
+.lp .brand span{color:#f4c95d}
+.lp .top nav{display:flex;gap:4px 20px;font-size:15px;font-weight:700}
+.lp .top nav a{color:#dfe7ff;text-decoration:none;white-space:nowrap}
+.lp .top nav a:hover,.lp .top nav a[aria-current]{color:#f4c95d}
+.lp .btn{white-space:nowrap;flex-shrink:0;display:inline-block;border-radius:999px;padding:14px 28px;font-weight:800;font-size:17px;text-decoration:none;border:2px solid transparent;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s,background .15s}
+.lp .btn:hover{transform:translateY(-2px)}
+.lp .btn.red{background:linear-gradient(#d6473a,#bb2f22);color:#fff;box-shadow:0 8px 22px rgba(192,57,43,.4)}
+.lp .btn.red:hover{background:#a82e21}
+.lp .btn.ghost{border-color:rgba(255,255,255,.75);color:#fff;background:rgba(255,255,255,.06)}
+.lp .btn.dark{border-color:#7a2118;color:#7a2118;background:transparent}
+.lp .btn.sm{padding:9px 18px;font-size:15px}
+.lp .hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 75% 15%,#34509a 0,#16255a 45%,#0a1230 80%);color:#fff;padding:56px 0 96px}
+.lp .hero::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.7;background-image:radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 90px 120px,#fff,transparent),radial-gradient(3px 3px at 160px 60px,#fff,transparent),radial-gradient(2px 2px at 230px 170px,#fff,transparent),radial-gradient(3px 3px at 300px 20px,#fff,transparent);background-size:320px 220px;animation:lpsnow 22s linear infinite}
+@keyframes lpsnow{to{background-position:-60px 220px}}
+.lp .hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:58px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0 30 Q150 0 300 28 T600 26 T900 30 T1200 22 V60 H0Z' fill='%23fbf6ea'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.lp .hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center}
+.lp .hero h1{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.lp .hero h1 em{font-style:normal;color:#f4c95d}
+.lp .hero p.lead{font-size:20px;color:#e6ecff}
+.lp .cta{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0 14px}
+.lp .chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:18px 0 0}
+.lp .chips li{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 14px;font-size:14px;font-weight:700;color:#fff}
+.lp .small{font-size:14px;opacity:.85}
+.lp .frame{border-radius:18px;overflow:hidden;box-shadow:0 22px 60px rgba(0,0,0,.5),0 0 60px rgba(244,201,93,.18);border:3px solid rgba(255,255,255,.2);background:#0a1230}
+.lp .hero .frame{transform:rotate(1.2deg)}
+.lp section{padding:46px 0}
+.lp section.alt{background:#f3e7c9}
+.lp .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px}
+.lp .card{background:#fffaf0;border:1.5px solid #e6d09a;border-radius:20px;padding:18px 18px 8px;box-shadow:0 6px 18px rgba(122,33,24,.07);transition:transform .2s,box-shadow .2s}
+.lp .card:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(122,33,24,.14)}
+.lp .card .frame{margin-bottom:14px;border-color:#e6d09a;box-shadow:none}
+.lp .steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.lp .steps li{counter-increment:s;background:#fffaf0;border:1.5px solid #e6d09a;border-radius:20px;padding:20px 18px 8px}
+.lp .steps li::before{content:counter(s);display:inline-flex;width:42px;height:42px;border-radius:50%;background:linear-gradient(#3b8460,#2a5f45);color:#f4c95d;font-family:"Fraunces",Georgia,serif;font-weight:700;font-size:21px;align-items:center;justify-content:center;margin-bottom:10px;box-shadow:0 4px 10px rgba(47,107,79,.35)}
+.lp .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center}
+.lp .note{background:#fff3cf;border-left:5px solid #f4c95d;padding:14px 18px;border-radius:10px;margin:1em 0}
+.lp ul.tick{padding-left:0;list-style:none}
+.lp ul.tick li{padding-left:30px;position:relative;margin-bottom:.5em}
+.lp ul.tick li::before{content:"\2605";position:absolute;left:0;color:#c0392b}
+.lp table{border-collapse:collapse;width:100%;margin:1em 0;font-size:16px}
+.lp th,.lp td{border:1px solid #e6d09a;padding:9px 11px;text-align:left;vertical-align:top}
+.lp th{background:#f3e7c9}
+.lp details{background:#fffaf0;border:1.5px solid #e6d09a;border-radius:14px;padding:14px 18px;margin:0 0 10px}
+.lp summary{cursor:pointer;font-weight:800;color:#3b2a1e}
+.lp details[open] summary{margin-bottom:8px}
+.lp .crumbs{font-size:14px;margin:18px 0 0;color:#6b5a4a}
+.lp .crumbs a{color:#6b5a4a}
+.lp .page h1{margin-top:.4em}
+.lp .band{background:radial-gradient(ellipse at 50% 0,#27407f,#0a1230 75%);color:#fff;text-align:center;padding:52px 0}
+.lp .band h2{color:#fff;margin-top:0}
+.lp .band .cta{justify-content:center}
+.lp footer{background:#0a1230;color:#c9d4f5;padding:34px 0;font-size:15px}
+.lp footer a{color:#e6ecff}
+.lp footer .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.lp footer h3{color:#fff;font-size:16px;font-family:inherit;font-weight:800}
+.lp footer ul{list-style:none;padding:0;margin:0}
+.lp footer li{margin-bottom:6px}
+@media(max-width:820px){.lp{font-size:17px}.lp .hero .wrap,.lp .two{grid-template-columns:1fr}.lp .hero{padding:34px 0 80px}.lp .hero .frame{transform:none}.lp section{padding:34px 0}}
+@media(max-width:520px){.lp .top .wrap{gap:8px}.lp .brand{font-size:14px}.lp .btn.sm{padding:7px 10px;font-size:10.5px;letter-spacing:.06em}.lp .top .wrap{padding-left:16px;padding-right:16px}.lp .btn{padding:13px 22px}}
+@media(prefers-reduced-motion:reduce){.lp video{display:none}.lp .frame .fallback{display:block}.lp .hero::before{animation:none}.lp .btn,.lp .card{transition:none}}
+.lp .fallback{display:none}
+/* variante moderne : bleu nuit profond, pilules, typo fine, hero plein cadre */
+.lp{background:#faf7f1;color:#231d1a}
+.lp h1,.lp h2{letter-spacing:-.02em}
+.lp h2{color:#1a2a5c;font-weight:600}
+.lp h3{font-family:"Nunito",system-ui,sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#231d1a;margin-bottom:.6em}
+.lp .top{background:rgba(8,14,38,.78);backdrop-filter:blur(10px)}
+.lp .top nav a{text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;font-weight:700;color:#e8ecfa}
+.lp .top nav a:hover{color:#f0d9a0}
+.lp .brand span{color:#f0d9a0}
+.lp .btn{text-transform:uppercase;letter-spacing:.12em;font-size:12.5px;padding:15px 30px}
+.lp .btn.red{background:#b3292f;box-shadow:0 8px 24px rgba(179,41,47,.35)}
+.lp .btn.ghost{border-color:rgba(255,255,255,.8);background:rgba(255,255,255,.08)}
+.lp .btn.sm{padding:10px 18px;font-size:11.5px}
+.lp .hero{min-height:min(82vh,740px);display:flex;align-items:center;padding:130px 0 130px;background:#0a1230}
+.lp .hero::before{z-index:1;opacity:.55;animation:lptwinkle 6s ease-in-out infinite alternate;background-image:radial-gradient(3px 3px at 30px 40px,#ffe2a0,transparent),radial-gradient(2px 2px at 110px 140px,#fff1cf,transparent),radial-gradient(4px 4px at 190px 70px,#f6d27a,transparent),radial-gradient(2px 2px at 250px 190px,#fff1cf,transparent),radial-gradient(3px 3px at 310px 20px,#ffe2a0,transparent);background-size:320px 220px}
+@keyframes lptwinkle{from{opacity:.25}to{opacity:.7}}
+.lp .hero .wrap{position:static;display:block;width:100%}
+.lp .hero .wrap>div:first-child{position:relative;z-index:3;max-width:560px}
+.lp .hero .frame{position:absolute;inset:0;z-index:0;border:0;border-radius:0;box-shadow:none;transform:none;background:#0a1230}
+.lp .hero .frame video{width:100%;height:100%;object-fit:cover;object-position:50% 100%;transform:scale(1.32);transform-origin:50% 100%;opacity:.95}
+.lp .hero .frame{overflow:hidden}
+.lp .hero .frame::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,14,38,.92) 0,rgba(8,14,38,.72) 38%,rgba(8,14,38,.1) 78%),linear-gradient(0deg,rgba(8,14,38,.65),transparent 35%)}
+.lp .hero::after{z-index:2}
+.lp .hero h1{font-size:clamp(36px,5vw,60px)}
+.lp .hero h1 em{color:#f0d9a0;font-style:italic}
+.lp .chips li{background:transparent;border:1px solid rgba(240,217,160,.55);text-transform:uppercase;letter-spacing:.12em;font-size:10.5px;color:#f6ecd0}
+.lp section{padding:64px 0}
+.lp section.alt{background:#f1ebde}
+.lp .card{background:#fff;border:0;border-radius:22px;padding:0 0 6px;overflow:hidden;box-shadow:0 2px 0 rgba(26,42,92,.04),0 14px 34px rgba(26,42,92,.09)}
+.lp .card .frame{border:0;border-radius:0;margin-bottom:16px}
+.lp .card h3,.lp .card p{padding:0 22px}
+.lp .steps li{background:#fff;border:0;border-radius:22px;box-shadow:0 14px 34px rgba(26,42,92,.08);padding:24px 22px 8px}
+.lp .steps li::before{background:none;box-shadow:none;color:#c6a45a;font-size:40px;font-style:italic;width:auto;height:auto;margin-bottom:6px;border-radius:0}
+.lp .note{background:#fff;border:0;border-radius:18px;box-shadow:0 14px 34px rgba(26,42,92,.08)}
+.lp details{border:0;background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(26,42,92,.07)}
+.lp .band{background:radial-gradient(ellipse at 50% 0,#2a3f80,#0a1230 75%)}
+.lp ul.tick li::before{color:#c6a45a}
+@media(max-width:820px){.lp .hero{min-height:auto;padding:110px 0 110px}.lp .hero .frame::after{background:linear-gradient(0deg,rgba(8,14,38,.9),rgba(8,14,38,.55))}}
+@media(max-width:1560px){.lp .top nav{display:none}}
+.lp .top .wrap{max-width:1400px}
+/* décors */
+.lp main,.lp footer{overflow-x:clip}
+.lp .band{position:relative;overflow:hidden;padding:140px 0 170px}.lp .band .wrap{position:relative;z-index:3}
+.lp .deco{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.lp .gar{position:absolute;top:0;width:100%;height:auto;min-width:1100px;left:50%;transform:translateX(-50%)}
+.lp .gar-top{position:absolute;left:0;right:0;top:-2px;height:150px;overflow:hidden;pointer-events:none;z-index:2}
+.lp .bl{animation:lpbl 2.8s ease-in-out infinite}.lp .bl.b1{animation-delay:.9s}.lp .bl.b2{animation-delay:1.7s}
+@keyframes lpbl{0%,100%{opacity:1}50%{opacity:.45}}
+.lp .sleigh{position:absolute;top:70px;left:0;width:clamp(150px,18vw,250px);height:auto;animation:lpsleigh 28s linear infinite;filter:drop-shadow(0 0 8px rgba(255,226,160,.35))}
+@keyframes lpsleigh{0%{transform:translate(-30vw,30px) rotate(4deg)}50%{transform:translate(48vw,-20px) rotate(-3deg)}100%{transform:translate(110vw,20px) rotate(3deg)}}
+.lp .snow,.lp .sled{position:absolute;left:0;bottom:0;width:100%;height:170px}
+.lp .sled{overflow:visible}
+.lp section{position:relative}
+.lp .sprig{position:absolute;top:calc(100% - 10px);z-index:6;pointer-events:none;width:clamp(150px,17vw,270px);opacity:0;transform-origin:var(--ox,100%) 0;transition:opacity 1s ease,transform 1.1s cubic-bezier(.2,.7,.2,1);transform:translateY(-22px) rotate(calc(var(--r) - 14deg)) scale(.9);filter:drop-shadow(0 10px 12px rgba(10,18,48,.25))}
+.lp .sprig svg{display:block;width:100%;height:auto}
+.lp .sprig.r{right:-26px}.lp .sprig.l{left:-34px;--ox:0%}.lp .sprig.l svg{transform:scaleX(-1)}
+.lp .sprig.in{opacity:1;transform:translateY(0) rotate(var(--r)) scale(1);animation:lpsway 7s ease-in-out 1.2s infinite alternate}
+@keyframes lpsway{from{transform:rotate(var(--r))}to{transform:rotate(calc(var(--r) + 2.5deg))}}
+.lp main{position:relative}
+.lp .wrap{position:relative;z-index:3}
+.lp .tree{position:absolute;top:0;right:0;bottom:0;width:calc(var(--tw) * 1.25 + 20px);pointer-events:none;z-index:2;overflow:hidden}
+.lp .tstar{position:absolute;top:96px;z-index:1}.lp .tstar svg{display:block}
+.lp .tcol{display:flex;flex-direction:column;align-items:flex-end}
+.lp .tseg{display:block;overflow:visible}
+.lp .tseg .tb{opacity:0;transition:opacity 1s ease}
+.lp .tseg .br{opacity:0;transform:translateX(34px) scale(.85);transform-box:fill-box;transform-origin:100% 50%;transition:opacity .9s ease var(--d),transform 1.1s cubic-bezier(.2,.7,.2,1) var(--d)}
+.lp .tseg.on .tb,.lp .tseg.on .br{opacity:1;transform:none}
+.lp .tree.still .tb,.lp .tree.still .br{opacity:1;transform:none;transition:none}
+.lp{--tw:clamp(0px,calc((100vw - 1120px)/2 + 40px),340px)}
+@media(max-width:1259px){.lp{--tw:clamp(36px,8vw,100px)}}
+@media(max-width:820px){.lp .sprig{width:120px}.lp .band{padding:120px 0 150px}}
+@media(prefers-reduced-motion:reduce){.lp .sleigh{animation:none;transform:translate(40vw,0)}.lp .bl,.lp .sprig.in{animation:none}.lp .sprig{opacity:1;transform:rotate(var(--r));transition:none}}
+
+#landing{position:fixed;inset:0;overflow:auto;overflow-x:hidden;z-index:200;display:none;background:#fbf6ea}
+html.landing #landing{display:block}
+@font-face{font-family:"Caveat";font-weight:600;font-display:swap;src:url(fonts/caveat-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Caveat";font-weight:700;font-display:swap;src:url(fonts/caveat-latin-700-normal.woff2) format("woff2")}
+
+/* finitions v4 */
+.btn{border-radius:999px;letter-spacing:.005em;font-weight:800}
+.btn.primary{background:linear-gradient(#d6473a,#bb2f22)}
+.btn.green{background:linear-gradient(#3b8460,#2a5f45)}
+.btn:focus-visible,.pill:focus-visible,.chip:focus-visible,.dr-tab:focus-visible,.dr-card:focus-visible,.door:focus-visible,.choice:focus-visible,input:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid #f4c95d;outline-offset:2px}
+.pill,.seg button{font-weight:700}
+.paper,.mcard{box-shadow:0 18px 50px rgba(0,0,0,.4),inset 0 0 0 1px rgba(185,138,84,.35)}
+.paper h2,.mcard h2{letter-spacing:.01em}
+.dr-tab{font-weight:800}
+.stile b,.sCnt b,.recap b{letter-spacing:-.01em}
+.sIn,.sBody input[type=text],.sBody input[type=date],.sBody input[type=time],.sBody textarea,.paper textarea,.mcard textarea{font-family:inherit}
+</style>
 <style>
 :root{
   --ink:#3b2a1e; --paper:#f6e6c4; --paper2:#ecd3a0; --red:#c0392b; --green:#2f6b4f; --gold:#f4c95d;
@@ -13,7 +193,7 @@
 body.dusk{ --glow:.65; --hill1:#ecdcec; --hill2:#c9b4d2; --ground1:#efdbe8; --ground2:#bfa6cb; --road:#dcc8dc; --ice:#d9c6e6; }
 body.night{ --glow:1; --hill1:#7b90c0; --hill2:#4f6499; --ground1:#92a7d3; --ground2:#566ca3; --road:#7a8dba; --ice:#7f9fd6; }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;overflow:hidden;background:#0f1b3d;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink)}
+html,body{height:100%;margin:0;overflow:hidden;background:#0f1b3d;font-family:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink)}
 .hidden{display:none!important}
 /* sky */
 #sky{position:fixed;inset:0;z-index:0}
@@ -88,7 +268,7 @@ body.night .cloud{fill:#9fb0d8;opacity:.35}body.dusk .cloud{fill:#ffd9c2;opacity
 #hud{position:fixed;inset:0;z-index:10;pointer-events:none}
 #hud>*{pointer-events:auto}
 .tl{position:absolute;left:16px;top:14px;background:rgba(255,250,238,.9);padding:12px 16px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.22);min-width:230px}
-.tl .title{font-family:Georgia,serif;font-size:20px;font-weight:700;color:var(--red)}
+.tl .title{font-family:"Fraunces",Georgia,serif;font-size:20px;font-weight:700;color:var(--red)}
 .wx{font-size:12px;opacity:.75;margin:2px 0 8px}
 .prog{display:flex;align-items:center;gap:8px;font-size:13px}
 .bar{flex:1;height:9px;border-radius:6px;background:rgba(0,0,0,.12);overflow:hidden}
@@ -123,7 +303,7 @@ body.night .cloud{fill:#9fb0d8;opacity:.35}body.dusk .cloud{fill:#ffd9c2;opacity
 #intro .card{position:relative;z-index:1}
 #intro .card{width:min(560px,92vw);text-align:center;color:#fff;padding:20px}
 .kicker{letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:var(--gold)}
-#intro h1{font-family:Georgia,serif;font-size:clamp(34px,6vw,54px);margin:6px 0 8px;text-shadow:0 4px 20px rgba(0,0,0,.5)}
+#intro h1{font-family:"Fraunces",Georgia,serif;font-size:clamp(34px,6vw,54px);margin:6px 0 8px;text-shadow:0 4px 20px rgba(0,0,0,.5)}
 #intro p{opacity:.88;margin:0 0 18px}
 #intro .label{font-size:13px;opacity:.8;margin-bottom:8px}
 #intro small{display:block;margin-top:14px;opacity:.65;font-size:12px}
@@ -143,7 +323,7 @@ body.night .cloud{fill:#9fb0d8;opacity:.35}body.dusk .cloud{fill:#ffd9c2;opacity
 .env:before{content:"";position:absolute;inset:0;border-radius:8px;background:linear-gradient(#d4ad6e,#c49a5c);clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%)}
 .env .flap{position:absolute;left:0;right:0;top:0;height:52%;background:linear-gradient(#ecd3a0,#e0be82);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .8s ease,z-index 0s .4s;z-index:2}
 .env.open .flap{transform:rotateX(180deg);z-index:0}
-.env .to{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-family:"Segoe Script","Bradley Hand","Brush Script MT",cursive;font-size:22px;color:#5a3a1a;z-index:3}
+.env .to{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-family:"Caveat","Segoe Script","Bradley Hand","Brush Script MT",cursive;font-size:29px;color:#5a3a1a;z-index:3}
 .env .seal{position:absolute;left:50%;top:52%;width:58px;height:58px;margin:-29px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e0584a,#a02418);color:#ffd9a0;display:flex;align-items:center;justify-content:center;font-size:26px;z-index:4;box-shadow:0 4px 10px rgba(0,0,0,.4);transition:all .5s;animation:pulse 1.6s ease-in-out infinite}
 .env.open .seal{opacity:0;transform:scale(.4);animation:none}
 @keyframes pulse{50%{transform:scale(1.1)}}
@@ -157,9 +337,9 @@ body.night .cloud{fill:#9fb0d8;opacity:.35}body.dusk .cloud{fill:#ffd9c2;opacity
 .paper{max-height:min(72vh,660px);overflow:auto;padding:26px 30px 30px;background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.35),transparent 50%),linear-gradient(#f8e9c8,#f0d9a6);box-shadow:inset 0 0 40px rgba(160,110,40,.35)}
 .step{animation:fadeIn .8s ease both;animation-delay:.1s}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
-.paper h2{font-family:"Segoe Script","Bradley Hand","Brush Script MT",cursive;font-size:30px;margin:0 0 10px;color:#8a2a1c}
+.paper h2{font-family:"Caveat","Segoe Script","Bradley Hand","Brush Script MT",cursive;font-size:39px;margin:0 0 10px;color:#8a2a1c}
 .paper p{line-height:1.55;margin:0 0 10px;font-size:15.5px}
-.paper .sig{font-family:"Segoe Script","Bradley Hand","Brush Script MT",cursive;font-size:20px;color:#8a2a1c;text-align:right}
+.paper .sig{font-family:"Caveat","Segoe Script","Bradley Hand","Brush Script MT",cursive;font-size:26px;color:#8a2a1c;text-align:right}
 .paper .lock{display:flex;gap:10px;align-items:flex-start;background:rgba(47,107,79,.12);border:1px dashed #2f6b4f;border-radius:12px;padding:10px 12px;font-size:13.5px;margin:6px 0 14px}
 .paper .grp{margin:12px 0 4px;font-weight:700;font-size:14.5px}
 .paper .hint{font-size:12.5px;opacity:.7;margin-bottom:6px}
@@ -172,7 +352,7 @@ body.night .cloud{fill:#9fb0d8;opacity:.35}body.dusk .cloud{fill:#ffd9c2;opacity
 .paper textarea{width:100%;min-height:68px;border:1.5px solid #b98a54;border-radius:12px;padding:10px;background:rgba(255,255,255,.5);font:inherit;font-size:14px;resize:vertical}
 .paper .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:sticky;bottom:-30px;padding:10px 0;background:linear-gradient(transparent,#f2dcae 35%)}
 .paper .note{font-size:12px;opacity:.65;margin-top:10px}
-.paper .big{font-family:Georgia,serif;font-size:30px;color:var(--red);text-align:center;margin:10px 0}
+.paper .big{font-family:"Fraunces",Georgia,serif;font-size:30px;color:var(--red);text-align:center;margin:10px 0}
 .paper .quote{background:rgba(255,255,255,.45);border-left:4px solid var(--gold);padding:10px 12px;border-radius:8px;font-style:italic}
 .paper .chip b{background:#fff;color:var(--green);border-radius:9px;padding:0 6px;margin-left:6px;font-size:11px}
 .paper .chip.active{outline:2px solid var(--gold);outline-offset:1px}
@@ -204,7 +384,7 @@ g.sm.on{opacity:1;transform:none}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#e74c3c;margin-left:6px;animation:pulse 1.4s infinite}
 #modal{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(5,8,25,.62);backdrop-filter:blur(3px)}
 .mcard{position:relative;width:min(580px,94vw);max-height:88vh;overflow:auto;background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.35),transparent 50%),linear-gradient(#f8e9c8,#f0d9a6);border-radius:18px;padding:24px 26px;box-shadow:0 24px 60px rgba(0,0,0,.55);animation:fadeIn .5s ease both}
-.mcard h2{font-family:"Segoe Script","Bradley Hand","Brush Script MT",cursive;font-size:28px;margin:0 0 6px;color:#8a2a1c}
+.mcard h2{font-family:"Caveat","Segoe Script","Bradley Hand","Brush Script MT",cursive;font-size:36px;margin:0 0 6px;color:#8a2a1c}
 .mcard p{line-height:1.55;margin:0 0 10px}
 .mcard .x{position:absolute;right:12px;top:10px;border:0;background:transparent;font-size:24px;cursor:pointer;color:#8a5a22}
 .mcard .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
@@ -212,7 +392,7 @@ g.sm.on{opacity:1;transform:none}
 .mcard .note{font-size:12px;opacity:.65}
 .mcard .quote{background:rgba(255,255,255,.5);border-left:4px solid var(--gold);padding:10px 12px;border-radius:8px;font-style:italic;margin-bottom:10px}
 .advgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:12px 0}
-.door{border:0;border-radius:10px;padding:8px 2px;cursor:pointer;font-family:Georgia,serif;font-size:18px;font-weight:700;color:#fff;background:linear-gradient(#b8453a,#8f2d25);box-shadow:inset 0 -4px 0 rgba(0,0,0,.2),0 3px 6px rgba(0,0,0,.2);display:flex;flex-direction:column;align-items:center;gap:1px}
+.door{border:0;border-radius:10px;padding:8px 2px;cursor:pointer;font-family:"Fraunces",Georgia,serif;font-size:18px;font-weight:700;color:#fff;background:linear-gradient(#b8453a,#8f2d25);box-shadow:inset 0 -4px 0 rgba(0,0,0,.2),0 3px 6px rgba(0,0,0,.2);display:flex;flex-direction:column;align-items:center;gap:1px}
 .door small{font-family:system-ui;font-size:10px;font-weight:400;opacity:.85}
 .door.lock{background:linear-gradient(#a99a85,#8b7d69);cursor:default;opacity:.7}
 .door.done{background:linear-gradient(#3b8a62,#2f6b4f)}
@@ -253,7 +433,7 @@ g.sm.on{opacity:1;transform:none}
 .phdone{display:flex;gap:10px;align-items:center;margin-top:8px}.phdone img{width:84px;height:84px;object-fit:cover;border-radius:10px}
 .rk{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:12px;background:rgba(255,255,255,.4);margin-bottom:6px}
 .rk.me{background:rgba(244,201,93,.55);outline:2px solid var(--gold)}
-.rk b{width:22px;font-family:Georgia,serif;font-size:18px;color:#8a2a1c}
+.rk b{width:22px;font-family:"Fraunces",Georgia,serif;font-size:18px;color:#8a2a1c}
 .rk .av svg{width:26px;height:44px;display:block;overflow:visible}
 .rk .nm2{flex:1;font-weight:600}.rk .pt{font-weight:700;color:var(--green)}
 .rules{font-size:12.5px;line-height:1.6;margin-top:10px;background:rgba(255,255,255,.35);border-radius:10px;padding:8px 12px}
@@ -268,7 +448,7 @@ g.sm.on{opacity:1;transform:none}
 .room{position:absolute;inset:0;overflow:hidden;animation:fadeIn .5s ease both}
 .room .bd{position:absolute;inset:0;width:100%;height:100%}
 .room .top{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top)) 16px 0;z-index:3;color:#fff}
-.room .top h2{font-family:Georgia,serif;margin:0;font-size:22px;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.room .top h2{font-family:"Fraunces",Georgia,serif;margin:0;font-size:22px;text-shadow:0 2px 8px rgba(0,0,0,.6)}
 .room .top small{display:block;font-family:system-ui;font-size:12px;opacity:.85;font-weight:400}
 .room .panel{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);animation:none;width:min(620px,94vw);max-height:72vh;z-index:2}
 .room .folks{position:absolute;left:0;right:0;bottom:calc(8px + env(safe-area-inset-bottom));display:flex;gap:16px;align-items:flex-end;justify-content:center;z-index:1}
@@ -347,7 +527,7 @@ g.sm.on{opacity:1;transform:none}
 /* menu + toasts */
 #menu{position:fixed;z-index:25;background:#fff8e8;border-radius:14px;padding:10px;box-shadow:0 10px 30px rgba(0,0,0,.35);width:230px;opacity:0;pointer-events:none;transform:scale(.9);transition:all .18s}
 #menu.show{opacity:1;pointer-events:auto;transform:none}
-#menu .t{font-weight:700;font-family:Georgia,serif;font-size:16px}
+#menu .t{font-weight:700;font-family:"Fraunces",Georgia,serif;font-size:16px}
 #menu .st{font-size:12px;opacity:.7;margin:2px 0 8px}
 #menu button{display:block;width:100%;text-align:left;border:0;background:rgba(47,107,79,.1);padding:8px 10px;border-radius:9px;margin-top:5px;cursor:pointer;font-size:13.5px;font-family:inherit;color:var(--ink)}
 #menu button:hover:not(:disabled){background:rgba(47,107,79,.22)}
@@ -407,22 +587,22 @@ body.player details.demo{display:none}
 .sSec::after{content:"";flex:1;height:1px;background:rgba(120,80,30,.25)}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
 .stile{display:block;background:rgba(255,255,255,.65);border-radius:12px;padding:10px 6px;text-align:center}
-.stile b{display:block;font:700 26px Georgia,serif;color:var(--green)}.stile span{display:block;font-size:12px;opacity:.8}
+.stile b{display:block;font:700 26px "Fraunces",Georgia,serif;color:var(--green)}.stile span{display:block;font-size:12px;opacity:.8}
 .stile.w b{color:#b4691f}
 .sPrev.stats{background:none;border:0;padding:0}
 .recap{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .recap div{flex:1;min-width:110px;background:rgba(255,255,255,.65);border-radius:12px;padding:10px 12px;font-size:12.5px}
-.recap b{display:block;font-size:17px;font-family:Georgia,serif;color:#8a2a1c}
+.recap b{display:block;font-size:17px;font-family:"Fraunces",Georgia,serif;color:#8a2a1c}
 .bigcta{width:100%;padding:14px 18px;font-size:16px;margin-top:6px}
 .sTool{background:rgba(255,255,255,.35);border:1px dashed rgba(120,80,30,.4);border-radius:12px;padding:10px 14px;margin-top:16px}
 .sFoot .grp{display:flex;gap:8px}
 .sFoot{background:rgba(255,255,255,.35)}
 @media (prefers-reduced-motion:reduce){.sCard *{transition:none!important}}
 
-.sBody h2{font-family:Georgia,serif;color:#8a2a1c;margin:0 0 4px;font-size:24px}
+.sBody h2{font-family:"Fraunces",Georgia,serif;color:#8a2a1c;margin:0 0 4px;font-size:24px}
 .sNote{font-size:13.5px;opacity:.8;margin:2px 0 12px}
 .sFoot{display:flex;justify-content:space-between;gap:10px;padding:12px 24px;border-top:1px solid rgba(120,80,30,.22)}
-.sCnt{font-size:15px;margin:6px 0 8px}.sCnt b{font-size:30px;font-family:Georgia,serif;color:var(--green)}
+.sCnt{font-size:15px;margin:6px 0 8px}.sCnt b{font-size:30px;font-family:"Fraunces",Georgia,serif;color:var(--green)}
 .srow{display:flex;gap:8px;align-items:center;margin-bottom:6px}
 .sav{width:26px;height:44px;flex:none}.sav svg{width:100%;height:100%}
 .sIn,.sBody input[type=text],.sBody input[type=date],.sBody input[type=time],.sBody textarea{border:1.5px solid #b98a54;background:rgba(255,255,255,.7);border-radius:10px;padding:8px 10px;font-size:14.5px;font-family:inherit;color:var(--ink);min-width:0}
@@ -469,10 +649,65 @@ body.player details.demo{display:none}
 .instl{margin:10px 0;padding:10px 12px;background:rgba(255,255,255,.55);border-radius:10px;font-size:14px;line-height:1.5}
 .instl b{color:#8a2a1c}
 .strk{display:inline-block;background:rgba(244,201,93,.55);border-radius:999px;padding:4px 12px;font-weight:700;font-size:13.5px;margin-bottom:10px}
-.stat{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}.stat div{background:rgba(255,255,255,.55);border-radius:10px;padding:8px 10px;text-align:center}.stat b{display:block;font-size:24px;font-family:Georgia,serif;color:var(--green)}
+.stat{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}.stat div{background:rgba(255,255,255,.55);border-radius:10px;padding:8px 10px;text-align:center}.stat b{display:block;font-size:24px;font-family:"Fraunces",Georgia,serif;color:var(--green)}
 </style>
 </head>
 <body class="night">
+<div id="landing" class="lp"><header class="top"><div class="wrap"><a class="brand" href="./">Secret Santa <span>·</span> Village de Noël</a>
+<nav aria-label="Navigation principale"><a href="secret-santa-a-distance.html">Secret Santa à distance</a><a href="jeu-de-noel-en-equipe.html">Jeu de Noël en équipe</a><a href="calendrier-de-l-avent-interactif.html">Calendrier de l’Avent</a><a href="guide-secret-santa.html">Guide Secret Santa</a><a href="faq.html">Questions fréquentes</a></nav>
+<a class="btn red sm" href="./#t=1" data-lp-demo>Essayer la démo</a></div></header>
+<main>
+<section class="hero"><div class="wrap"><div>
+<h1>Secret Santa – <em>Village de Noël</em> : le jeu de Noël de votre équipe</h1>
+<p class="lead">Un village sous la neige où chaque collègue a son bonhomme, un calendrier de l’Avent, des mini-jeux et un tirage au sort secret. Gratuit, sans compte pour les joueurs.</p>
+<div class="cta"><a class="btn red" href="./#t=1" data-lp-demo>Essayer la démo</a><a class="btn ghost" href="./#o=" data-lp-create>Préparer ma partie</a></div>
+<ul class="chips"><li>Gratuit</li><li>Sans compte pour les joueurs</li><li>Dans le navigateur</li></ul>
+<p class="small" style="margin-top:12px">La démo se joue avec des prénoms fictifs. Rien à installer.</p></div>
+<div class="frame"><video muted loop playsinline autoplay preload="metadata" poster="img/village-poster.jpg" aria-label="Le village de Noël sous la neige : boutiques, sapin illuminé et personnages qui se promènent, du jour à la nuit" data-lp-video><source src="img/village.webm" type="video/webm"><source src="img/village.mp4" type="video/mp4"></video><img class="fallback" src="img/village.jpg" alt="Le village de Noël sous la neige : boutiques, sapin illuminé et personnages qui se promènent, du jour à la nuit" width="1280" height="720" loading="lazy"></div>
+</div></section>
+<section><div class="wrap"><h2>Comment ça marche</h2>
+<ol class="steps">
+<li><h3>L’organisateur ajoute l’équipe</h3><p>Quelques prénoms, une date d’ouverture des cadeaux et un budget indicatif suffisent.</p></li>
+<li><h3>Chacun reçoit son lien</h3><p>Un lien personnel par joueur, à envoyer par messagerie ou par e-mail. Pas de compte à créer.</p></li>
+<li><h3>Chacun répond et souffle des idées</h3><p>« Oui, je participe », puis des idées confiées aux lutins, que personne d’autre ne lit.</p></li>
+<li><h3>Le tirage au sort a lieu</h3><p>Chacun découvre dans une lettre la personne à qui il offre. L’organisateur ne voit jamais les paires.</p></li>
+</ol></div></section>
+<section class="alt"><div class="wrap"><h2>Plus qu’un tirage : un village qui vit jusqu’au jour J</h2>
+<p>Les outils de tirage au sort ne manquent pas. Ici, le tirage n’est que le début : l’équipe a de bonnes raisons de revenir chaque jour jusqu’à l’ouverture des cadeaux.</p>
+<div class="grid">
+<div class="card"><div class="frame"><video muted loop playsinline preload="none" poster="img/advent-poster.jpg" aria-label="Le calendrier de l’Avent du village : 24 portes avec devinettes, anecdotes et défis photo" data-lp-video><source src="img/advent.webm" type="video/webm"><source src="img/advent.mp4" type="video/mp4"></video><img class="fallback" src="img/advent.jpg" alt="Le calendrier de l’Avent du village : 24 portes avec devinettes, anecdotes et défis photo" width="1280" height="720" loading="lazy"></div><h3>Un calendrier de l’Avent interactif</h3><p>Une porte par jour, avec devinettes, anecdotes et défis photo qui rapportent des points. L’organisateur peut relire et modifier les textes avant le tirage.</p><p><a href="calendrier-de-l-avent-interactif.html">Voir le calendrier</a></p></div>
+<div class="card"><div class="frame"><video muted loop playsinline preload="none" poster="img/dressing-poster.jpg" aria-label="Le Dressing du village : choisir un personnage, des accessoires et des couleurs avec ses points" data-lp-video><source src="img/dressing.webm" type="video/webm"><source src="img/dressing.mp4" type="video/mp4"></video><img class="fallback" src="img/dressing.jpg" alt="Le Dressing du village : choisir un personnage, des accessoires et des couleurs avec ses points" width="1280" height="720" loading="lazy"></div><h3>Des points à dépenser au Dressing</h3><p>Les jeux, les défis et les mots doux rapportent des points. On les dépense pour personnaliser son bonhomme : chapeaux, lunettes, ailes, couleurs spéciales.</p></div>
+<div class="card"><div class="frame"><img src="img/village.jpg" alt="Le village de Noël avec ses personnages, sa patinoire et ses boutiques" width="1280" height="720" loading="lazy"></div><h3>Des mini-jeux de quelques minutes</h3><p>Patinoire, jeu des paires, chocolat chaud parfait, atelier de biscuits à offrir : de quoi se faire des petits signes sans réunion.</p><p><a href="jeu-de-noel-en-equipe.html">Découvrir le jeu</a></p></div>
+</div></div></section>
+<section><div class="wrap two"><div><h2>Pour les équipes à distance comme au bureau</h2>
+<ul class="tick"><li>Un tirage au sort équitable qui respecte les exclusions discrètes</li><li>Des idées de cadeaux soufflées aux lutins, sans nom, à la personne qui pioche</li><li>Une ouverture des cadeaux à une date et une heure communes</li><li>Un tableau de bord pour l’organisateur : qui a répondu, points d’équipe, temps passé</li></ul>
+<p><a href="secret-santa-a-distance.html">Organiser un Secret Santa à distance</a></p></div>
+<div class="note"><b>Confidentialité du tirage.</b> Seuls les lutins lisent les idées et les préférences : ni les collègues ni l’organisateur ne les voient dans le village. L’écran du tirage n’affiche jamais les paires.</div></div></section>
+<section class="alt"><div class="wrap"><h2>Questions fréquentes</h2><details><summary>Est-ce que c’est gratuit ?</summary><p>Oui, le village est gratuit pour cette saison. Les joueurs n’ont aucun compte à créer : chacun reçoit un lien personnel.</p></details><details><summary>Faut-il créer un compte pour jouer ?</summary><p>Non. L’organisateur ajoute les prénoms, puis chaque joueur reçoit un lien personnel. Il suffit de l’ouvrir dans le navigateur, sur ordinateur ou sur mobile.</p></details><details><summary>Combien de personnes faut-il pour un Secret Santa ?</summary><p>Il faut au moins 3 joueurs pour que le tirage au sort ait un sens. Il n’y a pas d’autre minimum : l’ambiance est la même pour une équipe de 5 ou de 30.</p></details><details><summary>L’organisateur connaît-il qui offre à qui ?</summary><p>Non, pas dans l’application. L’écran du tirage n’affiche jamais les paires, et chaque joueur ne découvre que la personne à qui il offre, dans sa propre lettre.</p></details><details><summary>Et si quelqu’un ne veut pas participer ?</summary><p>Chaque joueur répond à l’invitation par « Oui, je participe » ou « Pas cette année ». Seuls ceux qui participent entrent dans le tirage.</p></details><p><a href="faq.html">Voir toutes les questions</a></p></div></section>
+<div class="band"><div class="deco" aria-hidden="true"><svg class="sleigh" viewBox="0 0 260 90" aria-hidden="true">
+<defs><linearGradient id="tr" x1="1" x2="0"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".9"/><stop offset="1" stop-color="#ffe2a0" stop-opacity="0"/></linearGradient></defs>
+<rect x="-120" y="48" width="170" height="3" rx="1.5" fill="url(#tr)" transform="translate(0,0)"/>
+<g fill="#d9b48a" stroke="#d9b48a">
+<g transform="translate(150,0)"><ellipse cx="22" cy="40" rx="17" ry="8"/><path d="M36,36 L48,22 L53,26 L44,42Z"/><circle cx="53" cy="21" r="5"/><path d="M52,17 l-4,-10 m4,10 l5,-11 m-9,5 l-6,-2 m11,3 l6,-4" stroke-width="2" fill="none"/><path d="M10,46 L6,64 M16,48 L16,64 M30,48 L34,64 M36,46 L42,62" stroke-width="3.4" stroke-linecap="round" fill="none"/></g>
+<g transform="translate(110,6)"><ellipse cx="22" cy="40" rx="17" ry="8"/><path d="M36,36 L48,22 L53,26 L44,42Z"/><circle cx="53" cy="21" r="5"/><path d="M52,17 l-4,-10 m4,10 l5,-11 m-9,5 l-6,-2 m11,3 l6,-4" stroke-width="2" fill="none"/><path d="M10,46 L6,64 M16,48 L16,64 M30,48 L34,64 M36,46 L42,62" stroke-width="3.4" stroke-linecap="round" fill="none"/></g>
+</g>
+<circle cx="216" cy="22" r="2.4" fill="#ff5a4d"/>
+<path d="M118,52 L96,56" stroke="#ffd166" stroke-width="1.6"/>
+<path d="M12,34 Q18,60 40,62 L100,62 Q112,60 112,40 L112,34Z" fill="#b3292f"/>
+<path d="M8,64 Q40,74 112,66" stroke="#d9b866" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<path d="M8,64 Q4,56 10,52" stroke="#d9b866" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<path d="M30,34 Q24,10 52,12 Q70,14 66,34Z" fill="#c9323a"/><path d="M36,18 l8,-12 l8,12" fill="#f4ecdc"/><circle cx="54" cy="3" r="3" fill="#f4ecdc"/>
+<rect x="72" y="22" width="28" height="22" rx="4" fill="#2f7a4d"/><path d="M72,32 h28 M86,22 v22" stroke="#ffd166" stroke-width="2.6"/>
+<rect x="40" y="26" width="26" height="12" rx="4" fill="#ffd166" opacity=".92"/>
+</svg><svg class="snow" viewBox="0 0 1440 170" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+<defs><linearGradient id="sn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f9ff"/><stop offset="1" stop-color="#c7d4f2"/></linearGradient></defs>
+<path d="M0,86 C180,40 360,110 560,92 C760,74 900,20 1120,60 C1280,88 1380,70 1440,60 L1440,170 L0,170Z" fill="url(#sn)"/>
+<path d="M0,86 C180,40 360,110 560,92 C760,74 900,20 1120,60 C1280,88 1380,70 1440,60" fill="none" stroke="#fff" stroke-width="3"/>
+</svg>
+<svg class="sled" viewBox="0 0 1440 170" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><g><animateMotion dur="9s" repeatCount="indefinite" rotate="auto" calcMode="spline" keyTimes="0;1" keySplines=".4 0 .8 .6" path="M-60,70 C80,44 180,34 270,52 C380,84 470,98 560,92 C700,82 800,36 900,26"/>
+<g transform="translate(-30,-60) scale(1.7)"><path d="M0,38 L38,38 Q46,38 46,32" fill="none" stroke="#7a4a2a" stroke-width="3.4" stroke-linecap="round"/><rect x="8" y="22" width="22" height="12" rx="4" fill="#b3292f"/><circle cx="22" cy="14" r="8" fill="#f2c7a5"/><path d="M13,12 Q22,-6 32,12Z" fill="#2f7a4d"/><circle cx="22" cy="-1" r="3" fill="#fff"/><rect x="14" y="19" width="16" height="4" rx="2" fill="#f4c95d"/><circle cx="19" cy="14" r="1.2" fill="#2b2320"/><circle cx="26" cy="14" r="1.2" fill="#2b2320"/><path d="M30,26 L44,22" stroke="#b3292f" stroke-width="4" stroke-linecap="round"/></g></g></svg></div><div class="wrap"><h2>Le village vous attend</h2><p>Essayez la démo en deux minutes, ou préparez votre partie dès maintenant.</p><div class="cta"><a class="btn red" href="./#t=1" data-lp-demo>Essayer la démo</a><a class="btn ghost" href="./#o=" data-lp-create>Préparer ma partie</a></div></div></div>
+</main>
+<footer><div class="wrap"><div class="cols"><div><h3>Secret Santa – Village de Noël</h3><p>Un jeu de Noël pour les équipes, les amis et les familles : un village animé, un calendrier de l’Avent, des mini-jeux et un tirage au sort secret.</p></div><div><h3>Découvrir</h3><ul><li><a href="secret-santa-a-distance.html">Secret Santa à distance</a></li><li><a href="jeu-de-noel-en-equipe.html">Jeu de Noël en équipe</a></li><li><a href="calendrier-de-l-avent-interactif.html">Calendrier de l’Avent</a></li><li><a href="guide-secret-santa.html">Guide Secret Santa</a></li><li><a href="faq.html">Questions fréquentes</a></li></ul></div><div><h3>Essayer</h3><ul><li><a href="./#t=1">Démo jouable, sans compte</a></li><li><a href="./#o=">Préparer ma partie</a></li></ul></div></div></div></footer></div>
 <div id="sky"><div class="s day"></div><div class="s dusk"></div><div class="s night"></div><div id="aurora"><i></i><i></i></div></div>
 <div id="gray"></div>
 <div id="stage"><div id="world"><svg id="bg" viewBox="0 0 1600 900"></svg><div id="chars"></div><div id="fx"></div><div id="sleigh" class="hidden"></div></div></div>
@@ -523,7 +758,7 @@ body.player details.demo{display:none}
 </div></div>
 
 <div id="setup" class="hidden"><div class="sCard">
-  <div class="sHead"><div class="sKick">Espace organisateur · Secret Santa</div><div style="font:700 20px Georgia,serif;color:#8a2a1c;margin-top:2px">Prépare ton village de Noël</div><div class="sSteps" id="sSteps"></div></div>
+  <div class="sHead"><div class="sKick">Espace organisateur · Secret Santa</div><div style="font:700 20px "Fraunces",Georgia,serif;color:#8a2a1c;margin-top:2px">Prépare ton village de Noël</div><div class="sSteps" id="sSteps"></div></div>
   <div class="sBody" id="sBody"></div>
   <div class="sFoot" id="sFoot"></div>
 </div></div>
@@ -785,7 +1020,7 @@ function buildBG(){
       <rect x="${x}" y="${top}" width="${w}" height="${H}" rx="6" fill="${h.body}"/>
       <rect x="${x-6}" y="${top-14}" width="${w+12}" height="16" rx="4" fill="${h.roof}"/><rect x="${x-6}" y="${top-18}" width="${w+12}" height="8" rx="4" fill="#fff"/>
       <rect x="${cx-52}" y="${top+4}" width="104" height="24" rx="6" fill="#fff8e8" stroke="${h.accent}" stroke-width="3"/>
-      <text x="${cx}" y="${top+22}" font-size="15" font-weight="700" text-anchor="middle" fill="${h.accent}" font-family="Georgia,serif">${h.label}</text>`;
+      <text x="${cx}" y="${top+22}" font-size="15" font-weight="700" text-anchor="middle" fill="${h.accent}" font-family="Fraunces,Georgia,serif">${h.label}</text>`;
       for(let k=0;k<6;k++){s+=`<path d="M${x-4+k*(w+8)/6} ${top+32} h${(w+8)/6} v6 a${(w+8)/12} ${(w+8)/12} 0 0 1 ${-(w+8)/6} 0z" fill="${k%2?'#fff':h.roof}"/>`;}
       s+=`<rect x="${x+10}" y="${top+54}" width="84" height="${H-54-6}" rx="5" fill="#8fb4d4"/><rect class="glow" x="${x+10}" y="${top+54}" width="84" height="${H-60}" rx="5" fill="#ffd37a"/>
       <g><rect x="${x+24}" y="${top+86}" width="22" height="34" rx="6" fill="#c0392b"/><circle cx="${x+35}" cy="${top+78}" r="8" fill="#f2c7a5"/><path d="M${x+27} ${top+76} q8 -14 16 0z" fill="#2f6b4f"/><rect x="${x+24}" y="${top+92}" width="22" height="5" fill="#f4c95d"/>
@@ -804,7 +1039,7 @@ function buildBG(){
     <path d="M${x-20} ${top+8} L${cx} ${top-82} L${x+w+20} ${top+8} Z" fill="${h.roof}"/>
     <path d="M${x-20} ${top+8} L${cx} ${top-82} L${x+w+20} ${top+8}" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
     <rect x="${cx-62}" y="${top+10}" width="124" height="26" rx="6" fill="#fff8e8" stroke="${h.accent}" stroke-width="3"/>
-    <text x="${cx}" y="${top+29}" font-size="17" font-weight="700" text-anchor="middle" fill="${h.accent}" font-family="Georgia,serif">${h.label}</text>`;
+    <text x="${cx}" y="${top+29}" font-size="17" font-weight="700" text-anchor="middle" fill="${h.accent}" font-family="Fraunces,Georgia,serif">${h.label}</text>`;
     [x+26,x+w-70].forEach(wx=>{ s+=`<rect x="${wx}" y="${top+52}" width="44" height="44" rx="5" fill="#9bb8d6"/><rect class="glow" x="${wx}" y="${top+52}" width="44" height="44" rx="5" fill="#ffd37a"/><path d="M${wx+22} ${top+52}v44M${wx} ${top+74}h44" stroke="#fff" stroke-width="3"/><circle class="glow" cx="${wx+22}" cy="${top+74}" r="60" fill="url(#halo)" opacity=".35"/>`; });
     s+=`<rect x="${cx-22}" y="${base-78}" width="44" height="78" rx="6" fill="${h.accent}"/><circle cx="${cx+12}" cy="${base-38}" r="3.5" fill="#f4c95d"/>
     <rect class="glow" x="${cx-22}" y="${base-78}" width="44" height="78" rx="6" fill="#ffd37a" opacity=".25"/>
@@ -841,7 +1076,7 @@ function buildBG(){
    <g class="sm" id="sm5"><rect x="-19" y="-121" width="38" height="5" rx="2" fill="#2b2b3a"/><rect x="-11" y="-142" width="22" height="22" rx="2" fill="#2b2b3a"/><rect x="-11" y="-127" width="22" height="4" fill="#c0392b"/></g>
    <g class="sm" id="sm6"><rect x="-17" y="-92" width="34" height="8" rx="4" fill="#c0392b"/><rect x="5" y="-88" width="8" height="18" rx="3" fill="#c0392b"/></g>
    <g class="sm" id="sm7"><path d="M-20 -76 L-48 -96 M-48 -96 l-8 -2 M-48 -96 l-3 -9" stroke="#6b4226" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M20 -76 L46 -92 M46 -92 l8 -4 M46 -92 l2 -9" stroke="#6b4226" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="0" cy="-70" r="2.5" fill="#222"/><circle cx="0" cy="-58" r="2.5" fill="#222"/><circle cx="0" cy="-44" r="2.5" fill="#222"/></g>
-   <g transform="translate(-92,16)"><rect x="-2" y="-18" width="4" height="22" fill="#6b4226"/><rect x="-50" y="-36" width="100" height="22" rx="3" fill="#e8c88a"/><text x="0" y="-21" font-size="10" text-anchor="middle" fill="#5a3a1a" font-family="Georgia,serif">1 cadeau = 1 morceau</text></g>
+   <g transform="translate(-92,16)"><rect x="-2" y="-18" width="4" height="22" fill="#6b4226"/><rect x="-50" y="-36" width="100" height="22" rx="3" fill="#e8c88a"/><text x="0" y="-21" font-size="10" text-anchor="middle" fill="#5a3a1a" font-family="Fraunces,Georgia,serif">1 cadeau = 1 morceau</text></g>
   </g>`;
   $('#bg').innerHTML=s;
 }
@@ -2149,5 +2384,11 @@ function initSetup(){
   render();
 }
 </script>
+<script>(function(){var L=document.getElementById('landing');if(!L)return;
+L.querySelectorAll('[data-lp-demo]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();location.hash='t=1';location.reload()})});
+L.querySelectorAll('[data-lp-create]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();document.documentElement.classList.remove('landing');try{history.replaceState(null,'',location.pathname)}catch(_){}scrollTo(0,0)})});
+var sp=[].slice.call(L.querySelectorAll('.sprig'));if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{root:L,threshold:.2,rootMargin:'0px 0px -8% 0px'});sp.forEach(function(x){io.observe(x)})}else{sp.forEach(function(x){x.classList.add('in')})}var vs=[].slice.call(L.querySelectorAll('video'));var rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+vs.forEach(function(v){if(rm){v.removeAttribute('autoplay');v.pause&&v.pause();return}
+if('IntersectionObserver' in window){new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){if(v.preload==='none')v.preload='auto';v.play&&v.play().catch(function(){})}else v.pause&&v.pause()})},{threshold:.25}).observe(v)}})})();</script>
 </body>
 </html>

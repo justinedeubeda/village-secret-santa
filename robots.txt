@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://justinedeubeda.github.io/village-secret-santa/sitemap.xml
