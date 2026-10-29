@@ -276,6 +276,12 @@ g.sm.on{opacity:1;transform:none}
 .folk svg{width:44px;height:74px;display:block;margin:0 auto 2px;overflow:visible}
 @media(max-height:720px){.room .folks{display:none}}
 .ckwrap{display:flex;justify-content:center;margin:8px 0}
+.fit svg{width:96px;height:160px;overflow:visible;animation:hop 1.7s ease-in-out infinite}
+.vit{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:8px 0}
+.vc{background:rgba(255,255,255,.55);border-radius:12px;padding:8px;text-align:center;font-size:13px}
+.vc svg{width:100%;max-width:110px;height:auto;display:block;margin:0 auto 4px;background:rgba(255,255,255,.35);border-radius:10px}
+.vc small{display:block;opacity:.7}
+#ckSvg{max-width:100%}
 #ckSvg{width:260px;height:260px;cursor:crosshair;touch-action:none}
 #ckSvg.bake{animation:bake 2s ease-in-out}
 @keyframes bake{0%{filter:none}50%{filter:drop-shadow(0 0 18px #ff9a3c) brightness(1.15)}100%{filter:none}}
@@ -517,7 +523,23 @@ const palOf=(k,f)=>(CHAR[k].pal&&CHAR[k].pal[f])||PAL[f];
 const kindOf=c=>CHAR[c&&c.kind]?c.kind:'classic';
 const NS=(s,n)=>String(s==null?'':s).replace(/[<>"&`\\]/g,'').slice(0,n||300);
 const HEXOK=v=>typeof v==='string'&&/^#[0-9a-f]{3,8}$/i.test(v);
-const lookOf=c=>{const k=kindOf(c),o={kind:k};FIELDS.forEach(f=>{o[f]=(c&&HEXOK(c[f]))?c[f]:CHAR[k].def[f];});o.glasses=!!(c&&c.glasses);return o;};
+const ACC={hd:['halo','bois','fleur','etoiles'],nk:['noeud','medaille','guirlande'],bk:['cape','ailes','hotte']};
+const ITEMS={halo:{s:'hd',n:'Auréole',p:5},bois:{s:'hd',n:'Bois de renne',p:5},fleur:{s:'hd',n:'Fleur de cerisier',p:0},etoiles:{s:'hd',n:'Pluie d’étoiles',p:10},noeud:{s:'nk',n:'Nœud papillon',p:0},medaille:{s:'nk',n:'Médaille d’or',p:5},guirlande:{s:'nk',n:'Guirlande lumineuse',p:10},cape:{s:'bk',n:'Cape rouge',p:10},ailes:{s:'bk',n:'Ailes d’ange',p:15},hotte:{s:'bk',n:'Hotte du Père Noël',p:5}};
+const sp4=(x,y,r)=>`<path d="M${x} ${y-r}L${x+r*.28} ${y-r*.28}L${x+r} ${y}L${x+r*.28} ${y+r*.28}L${x} ${y+r}L${x-r*.28} ${y+r*.28}L${x-r} ${y}L${x-r*.28} ${y-r*.28}Z" fill="#ffd95a" stroke="#fff6c0" stroke-width=".4"/>`;
+const ACC_SVG={
+ halo:'<ellipse cx="30" cy="1" rx="14" ry="3.6" fill="none" stroke="#ffe27a" stroke-width="3"/><ellipse cx="30" cy="1" rx="14" ry="3.6" fill="none" stroke="#fff6c0" stroke-width="1" opacity=".8"/>',
+ bois:'<g stroke="#8b5a2b" stroke-width="2.6" fill="none" stroke-linecap="round"><path d="M21 12L14 0M17.5 6L9 5M14 0L19 -3"/><path d="M39 12L46 0M42.5 6L51 5M46 0L41 -3"/></g>',
+ fleur:'<g transform="translate(16 15)">'+[[3.6,0],[1.1,3.4],[-2.9,2.1],[-2.9,-2.1],[1.1,-3.4]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.8" fill="#ffb7cb" stroke="#e0829c" stroke-width=".5"/>`).join('')+'<circle r="1.7" fill="#f4c95d"/></g>',
+ etoiles:sp4(7,10,5)+sp4(53,14,4)+sp4(45,-3,4.5)+sp4(14,-3,3),
+ noeud:'<path d="M30 44L21 39L21 49Z M30 44L39 39L39 49Z" fill="#c0392b" stroke="#7a1f16" stroke-width=".8"/><circle cx="30" cy="44" r="2.6" fill="#e0675a"/>',
+ medaille:'<path d="M24 42L30 56L36 42" stroke="#c0392b" stroke-width="3" fill="none"/><circle cx="30" cy="59" r="5.5" fill="#f4c95d" stroke="#b8861c" stroke-width="1.2"/><path d="M30 55.5l1.3 2.7 3 .4-2.2 2.1.5 3-2.6-1.4-2.6 1.4.5-3-2.2-2.1 3-.4z" fill="#fff3b8"/>',
+ guirlande:'<path d="M15 50Q30 62 45 50" fill="none" stroke="#2f3b2f" stroke-width="1.2"/>'+[.15,.38,.62,.85].map((t,i)=>{const x=(1-t)*(1-t)*15+2*(1-t)*t*30+t*t*45,y=(1-t)*(1-t)*50+2*(1-t)*t*62+t*t*50;return `<circle cx="${x.toFixed(1)}" cy="${(y+1.5).toFixed(1)}" r="2.3" fill="${['#ff5a4d','#ffd35a','#5ad17a','#5aa8ff'][i]}"/>`;}).join(''),
+ cape:'<path d="M15 41Q2 72 5 94L55 94Q58 72 45 41Z" fill="#a82d2d" stroke="#6e1b1b" stroke-width="1.2"/>',
+ ailes:'<path d="M17 50Q-10 26 0 62Q5 56 10 60Q8 68 18 64Z" fill="#fff" stroke="#c9d6f2" stroke-width="1.2"/><path d="M43 50Q70 26 60 62Q55 56 50 60Q52 68 42 64Z" fill="#fff" stroke="#c9d6f2" stroke-width="1.2"/>',
+ hotte:'<path d="M38 50Q62 40 58 72Q55 88 38 82Z" fill="#b83a2c" stroke="#7a1f16" stroke-width="1.2"/><path d="M42 48q8 -8 14 -2" stroke="#f4c95d" stroke-width="2.4" fill="none"/><rect x="47" y="60" width="7" height="7" fill="#ffd35a"/>'
+};
+function accSVG(c){const g=sl=>{const id=c&&ACC[sl].includes(c[sl])?c[sl]:null;return id?ACC_SVG[id]:'';};return {hd:g('hd'),nk:g('nk'),bk:g('bk')};}
+const lookOf=c=>{const k=kindOf(c),o={kind:k};FIELDS.forEach(f=>{o[f]=(c&&HEXOK(c[f]))?c[f]:CHAR[k].def[f];});o.glasses=!!(c&&c.glasses);['hd','nk','bk'].forEach(sl=>{if(c&&ACC[sl].includes(c[sl]))o[sl]=c[sl];});return o;};
 const randLookK=k=>{k=k||pick(CHARS);const o={kind:k};FIELDS.forEach(f=>{o[f]=CHAR[k].def[f]===null?null:pick(palOf(k,f));});return o;};
 const LEGS=(col)=>`<rect class="legL" x="20" y="76" width="8" height="18" rx="4" fill="${col}"/><rect class="legR" x="32" y="76" width="8" height="18" rx="4" fill="${col}"/>`;
 const ARMS=(col,hand)=>`<ellipse class="armL" cx="12" cy="58" rx="6" ry="12" fill="${col}"/><ellipse class="armR" cx="48" cy="58" rx="6" ry="12" fill="${col}"/>${hand?`<circle cx="12" cy="69" r="4.5" fill="${hand}"/><circle cx="48" cy="69" r="4.5" fill="${hand}"/>`:''}`;
@@ -574,9 +596,9 @@ const DRAW={
 };
 let FUID=0;
 function figSVG(c){
-  const k=kindOf(c),L=lookOf(c),R=DRAW[k](L,c),f=c&&(c.face||FACES[c.n]),fr=k==='sapin'?12:13,id='fc'+(++FUID);
+  const A=accSVG(c),k=kindOf(c),L=lookOf(c),R=DRAW[k](L,c),f=c&&(c.face||FACES[c.n]),fr=k==='sapin'?12:13,id='fc'+(++FUID);
   const face=f?`<clipPath id="${id}"><circle cx="30" cy="28" r="${fr}"/></clipPath><image href="${/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(f)?f:''}" x="${30-fr}" y="${28-fr}" width="${2*fr}" height="${2*fr}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/><circle cx="30" cy="28" r="${fr}" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.2"/>`:'';
-  return `<svg viewBox="0 0 60 100" data-kind="${k}"><ellipse cx="30" cy="95" rx="19" ry="5" fill="rgba(20,30,60,.28)"/>${R.legs}<g class="body">${R.arms}${R.torso}${R.head}${f?face:R.feat}${R.top}<g class="gift"><rect x="40" y="62" width="18" height="15" rx="2" fill="#e74c3c"/><rect x="47" y="62" width="4" height="15" fill="#ffd35a"/><rect x="40" y="68" width="18" height="3" fill="#ffd35a"/></g></g></svg>`;}
+  return `<svg viewBox="0 0 60 100" data-kind="${k}"><ellipse cx="30" cy="95" rx="19" ry="5" fill="rgba(20,30,60,.28)"/>${A.bk}${R.legs}<g class="body">${R.arms}${R.torso}${R.head}${f?face:R.feat}${R.top}${A.nk}${A.hd}<g class="gift"><rect x="40" y="62" width="18" height="15" rx="2" fill="#e74c3c"/><rect x="47" y="62" width="4" height="15" fill="#ffd35a"/><rect x="40" y="68" width="18" height="3" fill="#ffd35a"/></g></g></svg>`;}
 
 /* ---------- défilé des lutins de l'équipe sur l'écran d'accueil ---------- */
 function paradeInit(){
@@ -640,10 +662,11 @@ const netErr=e=>toast('Les lutins n\'arrivent pas à joindre le serveur ('+((e&&
 
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const SHOPS=[
- {cx:210,label:'Boulangerie',body:'#e6a96b',roof:'#a8472f',accent:'#6b3a2a'},
- {cx:520,label:'Jouets',body:'#7fb3d5',roof:'#2f6b4f',accent:'#c0392b'},
- {cx:1090,label:'Librairie',body:'#c58fb3',roof:'#5b3f8c',accent:'#2f6b4f'},
- {cx:1400,label:'Chocolaterie',body:'#b98a6a',roof:'#c0392b',accent:'#3b2a1e'}
+ {cx:100,label:'Boulangerie',body:'#e6a96b',roof:'#a8472f',accent:'#6b3a2a'},
+ {cx:325,label:'Jouets',body:'#7fb3d5',roof:'#2f6b4f',accent:'#c0392b'},
+ {cx:1085,label:'Librairie',body:'#c58fb3',roof:'#5b3f8c',accent:'#2f6b4f'},
+ {cx:1305,label:'Chocolaterie',body:'#b98a6a',roof:'#c0392b',accent:'#3b2a1e'},
+ {cx:1500,label:'Vêtements',body:'#d99ab7',roof:'#4b3a7a',accent:'#7a2d4f'}
 ];
 let SLOTS=[];
 function genSlots(n){SLOTS=[];const need=Math.max(n,15)+2;let r=0,cnt=5;while(SLOTS.length<need&&r<7){const y=Math.min(872,708+r*40);for(let k=0;k<cnt;k++)SLOTS.push([800+Math.round((k-(cnt-1)/2)*64),y]);r++;cnt+=4;}}
@@ -678,7 +701,7 @@ function buildBG(){
     s+=`<g transform="translate(${x},690)"><rect x="-3" y="-110" width="6" height="110" fill="#2e3548"/><circle cx="0" cy="-118" r="9" fill="#ffe08a"/><circle class="glow" cx="0" cy="-118" r="64" fill="url(#halo)"/></g>`;});
   // maisons
   SHOPS.forEach((h,hi)=>{
-    const w=230,H=190,base=612,x=h.cx-w/2,top=base-H,cx=h.cx;
+    const w=200,H=190,base=612,x=h.cx-w/2,top=base-H,cx=h.cx;
     s+=`<g id="shop${hi}" class="hot">
     <rect x="${x}" y="${top}" width="${w}" height="${H}" rx="8" fill="${h.body}"/>
     <path d="M${x-20} ${top+8} L${cx} ${top-82} L${x+w+20} ${top+8} Z" fill="${h.roof}"/>
@@ -754,7 +777,7 @@ function mk(m,isMe){
   el.addEventListener('click',()=>{ if(isMe){if(c.notes&&c.notes.length)showNotes();else say(c,'C\'est moi !',1400);return;} openMenu(c); });
   place(c); return c;
 }
-function refig(c,look){if(look)Object.assign(c,look);c.fig.innerHTML=figSVG(c);}
+function refig(c,look){if(look){['hd','nk','bk'].forEach(sl=>delete c[sl]);Object.assign(c,look);}c.fig.innerHTML=figSVG(c);}
 function say(c,t,ms=2400){c.bubble.textContent=t;c.bubble.classList.add('show');clearTimeout(c._bt);c._bt=setTimeout(()=>c.bubble.classList.remove('show'),ms);}
 function setWalking(c,w){c.el.classList.toggle('walking',w);}
 function goto(c,x,y){c.tx=x;c.ty=y;c.arrived=false;}
@@ -773,6 +796,14 @@ function onArrive(c){
   else if(c.state==='toTree'){c.el.classList.remove('hasgift');addToPile(c);c.state='ready';c.el.classList.add('ready');c.timer=rnd(2,4);c.dir=c.x<800?1:-1;}
   else c.timer=rnd(1,3.5);
 }
+function unmakeReady(c,quiet){
+  if(!c.bought)return;c.bought=false;
+  if(c.pg){c.pg.remove();c.pg=null;relayoutPile();}
+  c.el.classList.remove('hasgift','ready');c.slot=undefined;c.state='idle';c.tx=c.x;c.ty=c.y;c.arrived=true;c.timer=.4;
+  if(c.isMe&&!quiet){if(API.on)API.rpc('set_ready',{p_token:TOKEN,p_ready:false}).catch(netErr);setReadyBtn();toast('Ton cadeau est repris. Tu pourras le reposer quand il sera prêt.');}
+  updateProgress();
+}
+function setReadyBtn(){const b=$('#btnReady');if(!b)return;if(me&&me.bought){b.textContent='Reprendre mon cadeau';b.classList.remove('primary');b.classList.add('ghost');}else{b.textContent='Mon cadeau est prêt';b.classList.add('primary');b.classList.remove('ghost');}b.disabled=false;}
 function makeReady(c,quiet){
   if(c.bought) return; c.bought=true; if(c.isMe&&!quiet){earnK('ready','me',10,'cadeau prêt');if(API.on)API.rpc('set_ready',{p_token:TOKEN,p_ready:true}).catch(netErr);}
   if(c.state==='inShop') c.el.classList.remove('inshop');
@@ -840,7 +871,7 @@ function closeMenu(){ if(menuFor){menuFor.paused=false;menuFor=null;} $('#menu')
 document.addEventListener('click',e=>{ if(!e.target.closest('#menu')&&!e.target.closest('.ch')) closeMenu(); });
 $('#menu').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b||b.disabled||!menuFor) return; const c=menuFor, a=b.dataset.a; closeMenu();
-  if(a==='nudge') nudgeLutin(c); else if(a==='ball') snowball(me,c); else if(a==='wave') wave(me,c); else if(a==='note') composeNote(c);
+  if(a==='nudge') nudgeLutin(c); else if(a==='ball'){if(ballOK())snowball(me,c);} else if(a==='wave') wave(me,c); else if(a==='note') composeNote(c);
 });
 function sendElf(c,cb){
   const elf=document.createElement('div');elf.className='elf';
@@ -851,6 +882,10 @@ function sendElf(c,cb){
 }
 const sendMsg=(c,kind,body)=>{if(API.on)API.rpc('send_msg',{p_token:TOKEN,p_to:c.n,p_kind:kind,p_body:body||''}).catch(netErr);};
 function nudgeLutin(c){nudged.add(c.n);sendMsg(c,'nudge');toast(`Un lutin file murmurer un mot à ${c.n}. Tu restes anonyme.`);sendElf(c,()=>{wobble(c);say(c,'Un lutin m\'a soufflé quelque chose…',2800);});}
+const ballLog=(()=>{try{return JSON.parse(localStorage.getItem('ssBall')||'[]').filter(x=>typeof x==='number');}catch(e){return [];}})();
+function ballOK(){const n=Date.now();while(ballLog.length&&n-ballLog[0]>3600000)ballLog.shift();
+  if(ballLog.length>=5){toast('Les lutins n\'ont plus de boules de neige en stock : 5 par heure et par personne. Reviens dans un petit moment !');return false;}
+  ballLog.push(n);try{localStorage.setItem('ssBall',JSON.stringify(ballLog));}catch(e){}return true;}
 function snowball(from,to,remote){
   if(API.on&&from.isMe&&!remote)sendMsg(to,'snow');
   const x1=from.x,y1=from.y-50,x2=to.x,y2=to.y-45,b=document.createElement('div');b.className='ball';$('#fx').appendChild(b);
@@ -1083,7 +1118,7 @@ async function bootBackend(){
 function returning(){
   const L=API.L;
   if(L.participates===false){me.alive=false;me.hidden=true;me.el.style.display='none';enterVillage(true);return;}
-  if(L.ready){makeReady(me,true);$('#btnReady').textContent='Cadeau prêt, bravo !';$('#btnReady').disabled=true;}
+  if(L.ready){makeReady(me,true);setReadyBtn();}
   enterVillage(false);toast('Content de te revoir, '+me.n+' !');
 }
 function visitToday(){
@@ -1108,6 +1143,7 @@ function startPoll(){
     if(T.fv!=null&&T.fv!==API.fv){API.fv=T.fv;try{const F=await API.rpc('faces',{p_token:TOKEN});Object.keys(FACES).forEach(k=>{if(!(k in F))delete FACES[k];});Object.assign(FACES,F);chars.forEach(c=>refig(c));}catch(e){}}
     chars.forEach(c=>{if(c.isMe)return;const v=T.village.find(x=>x.name===c.n);if(v&&v.look&&JSON.stringify(lookOf(v.look))!==JSON.stringify(lookOf(c))){refig(c,lookOf(v.look));}});
     chars.forEach(c=>{if(c.isMe||c.bought||c.hidden)return;const v=T.village.find(x=>x.name===c.n);if(v&&v.ready)makeReady(c);});
+    if(!API.opened)chars.forEach(c=>{if(c.isMe||!c.bought||c.hidden)return;const v=T.village.find(x=>x.name===c.n);if(v&&v.ready===false)unmakeReady(c,true);});
     if(T.drawn&&!API.L.drawn){API.L.drawn=true;$('#btnLetter').classList.remove('hidden');notify('Tirage','Le tirage a eu lieu ! Ouvre « Ma lettre du lutin » pour découvrir à qui tu offres.');toast('Le tirage a eu lieu ! Ouvre « Ma lettre du lutin ».');}
     myPts=T.pts;const e=$('#ptsN');if(e)e.textContent=myPts;
     T.messages.forEach((m,k)=>setTimeout(()=>deliver(m),k*1400));
@@ -1396,7 +1432,8 @@ const SHOP_INFO=[
  {n:'Boulangerie',sub:'Atelier des biscuits de Noël',wall:'#e8b98a',floor:'#8b5a3b'},
  {n:'Jouets',sub:'Le jeu des paires du Père Noël',wall:'#9cc7e6',floor:'#6b7aa8'},
  {n:'Librairie',sub:'Quiz, contes et lettres des lutins',wall:'#7a4e8c',floor:'#4b2f58'},
- {n:'Chocolaterie',sub:'Le chocolat chaud parfait',wall:'#9a6444',floor:'#5a3724'}
+ {n:'Chocolaterie',sub:'Le chocolat chaud parfait',wall:'#9a6444',floor:'#5a3724'},
+ {n:'Boutique de vêtements',sub:'La cabine d\'essayage du village',wall:'#e3b9cf',floor:'#7b5a78'}
 ];
 const dailyDone=new Set();
 function earnDaily(key,n,why){const k=key+dayKey(nowD());if(dailyDone.has(k)){toast('Déjà récompensé aujourd\'hui, mais amuse-toi bien !');return false;}dailyDone.add(k);earnK('daily',k,n,why);return true;}
@@ -1422,6 +1459,7 @@ function roomBG(i){
       for(let k=0;k<12;k++){g+=`<rect x="${28+k*26}" y="${76+r*68+rnd(0,8)}" width="20" height="${44-rnd(0,8)}" fill="${bulb[(k+r)%5]}"/><rect x="${658+k*26}" y="${76+r*68+rnd(0,8)}" width="20" height="${44-rnd(0,8)}" fill="${bulb[(k+r+1)%5]}"/>`;}}}
   if(i===3){for(let r=0;r<2;r++){g+=`<rect x="40" y="${200+r*90}" width="270" height="8" fill="#3a2214"/><rect x="690" y="${200+r*90}" width="270" height="8" fill="#3a2214"/>`;
       for(let k=0;k<6;k++){g+=`<rect x="${52+k*42}" y="${156+r*90}" width="30" height="44" rx="6" fill="${['#c0392b','#f4c95d','#fff','#5a2d17'][(k+r)%4]}" opacity=".9"/><rect x="${702+k*42}" y="${156+r*90}" width="30" height="44" rx="6" fill="${['#5a2d17','#fff','#c0392b','#f4c95d'][(k+r)%4]}" opacity=".9"/>`;}}}
+  if(i===4){for(let r=0;r<2;r++){g+=`<rect x="40" y="${190+r*95}" width="290" height="6" fill="#4a3a4a"/><rect x="670" y="${190+r*95}" width="290" height="6" fill="#4a3a4a"/>`;for(let k=0;k<6;k++){g+=`<path d="M${58+k*46} ${196+r*95}l14 -8 14 8 -3 40h-22z" fill="${bulb[(k+r)%5]}"/><path d="M${688+k*46} ${196+r*95}l14 -8 14 8 -3 40h-22z" fill="${bulb[(k+r+2)%5]}"/>`;}}}
   return `<svg class="bd" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice">${g}</svg>`;
 }
 function openInterior(i){
@@ -1431,7 +1469,7 @@ function openInterior(i){
    <div class="folks"><div class="folk">${figSVG(me)}Toi</div>${others.map(c=>`<div class="folk" data-n="${esc(c.n)}">${figSVG(c)}${esc(c.n)}</div>`).join('')}</div>`;
   $('#interior').classList.remove('hidden');
   $('#roomOut').onclick=closeInterior;
-  [shopBak,shopToy,shopLib,shopCho][i]();
+  [shopBak,shopToy,shopLib,shopCho,shopWar][i]();
 }
 function closeInterior(){
   $('#interior').classList.add('hidden');if(me&&me.manual){me.manual=false;me.timer=.3;}
@@ -1446,35 +1484,111 @@ const CK_SHAPES={
  tree:'<polygon points="100,10 150,80 125,80 165,140 112,140 112,185 88,185 88,140 35,140 75,80 50,80"/>',
  man:'<circle cx="100" cy="40" r="28"/><rect x="64" y="62" width="72" height="72" rx="22"/><rect x="16" y="70" width="64" height="26" rx="13"/><rect x="120" y="70" width="64" height="26" rx="13"/><rect x="62" y="116" width="30" height="66" rx="14"/><rect x="108" y="116" width="30" height="66" rx="14"/>'};
 const candy=d=>`<g><circle cx="${d.x}" cy="${d.y}" r="10" fill="${d.c}" stroke="#3b2412" stroke-width="2"/><circle cx="${d.x-3}" cy="${d.y-3}" r="3" fill="#fff" opacity=".7"/></g>`;
+const ckLine=l=>`<path d="${l.p.map((q,i)=>(i?'L':'M')+q[0]+' '+q[1]).join(' ')}" fill="none" stroke="${l.c}" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>`;
+const CK_MAXDOTS=60,CK_MAXLINES=12,CK_MAXPTS=90;
+/* données d'un biscuit venant du serveur : tout est revalidé avant d'être affiché */
+function cleanCk(d){
+  const n=v=>{v=+v;return isFinite(v)?Math.max(0,Math.min(200,Math.round(v))):0;};
+  d=d&&typeof d==='object'?d:{};
+  return {shape:CK_SHAPES[d.shape]?d.shape:'star',ice:HEXOK(d.ice)?d.ice:'#ffffff',
+    dots:(Array.isArray(d.dots)?d.dots:[]).slice(0,CK_MAXDOTS).map(x=>({x:n(x&&x.x),y:n(x&&x.y),c:HEXOK(x&&x.c)?x.c:'#e74c3c'})),
+    lines:(Array.isArray(d.lines)?d.lines:[]).slice(0,CK_MAXLINES).map(l=>({c:HEXOK(l&&l.c)?l.c:'#e74c3c',p:(Array.isArray(l&&l.p)?l.p:[]).slice(0,CK_MAXPTS).map(q=>[n(q&&q[0]),n(q&&q[1])])}))};
+}
+const ckBody=(ck,extra)=>`<g fill="#c98b4a" stroke="#a8692f" stroke-width="3">${CK_SHAPES[ck.shape]}</g><g fill="${ck.ice}" transform="translate(100 100) scale(.84) translate(-100 -100)">${CK_SHAPES[ck.shape]}</g><g id="ckLines">${ck.lines.map(ckLine).join('')}</g>${ck.dots.map(candy).join('')}`;
+const ckSVG=d=>{const ck=cleanCk(d);return `<svg viewBox="0 0 200 200">${ckBody(ck)}</svg>`;};
+const DEMO_CK=[];
+async function showVitrine(){
+  const P=$('#panel');P.innerHTML='<h2>Vitrine des biscuits</h2><p>Les lutins sortent les biscuits de la vitrine…</p>';
+  let list;
+  try{list=API.on?await API.rpc('cookies',{p_token:TOKEN}):DEMO_CK;}catch(e){P.innerHTML='<h2>Vitrine des biscuits</h2><p>La vitrine n\'est pas encore disponible, réessaie un peu plus tard.</p><div class="row"><button class="btn ghost" id="vtBack">Retour à l\'atelier</button></div>';P.onclick=ev=>{if(ev.target.closest('#vtBack'))shopBak();};return;}
+  list=Array.isArray(list)?list:[];
+  P.innerHTML=`<h2>Vitrine des biscuits</h2><p class="note">${list.length?`${list.length} biscuit${list.length>1?'s':''} offert${list.length>1?'s':''} au village. Qui a offert à qui, c'est écrit dessous !`:'Aucun biscuit pour l\'instant. Sois le premier à en offrir un !'}</p>
+  <div class="vit">${list.map(x=>`<div class="vc">${ckSVG(x.data)}<b>${esc(NS(x.from,40))} → ${esc(NS(x.to,40))}</b><small>${x.at?new Date(x.at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):''}</small></div>`).join('')}</div>
+  <div class="row"><button class="btn ghost" id="vtBack">Retour à l'atelier</button></div>`;
+  P.onclick=ev=>{if(ev.target.closest('#vtBack'))shopBak();};
+}
 function shopBak(){
-  const ck={shape:'star',ice:'#ffffff',top:'#e74c3c',dots:[],baked:false,to:null};
-  const ICE=['#ffffff','#ffd1dc','#bfe3ff','#fff3b0','#d8f5d0','#e9c9ff'],TOP=['#e74c3c','#2f6b4f','#2a6f9e','#f4c95d','#c25b8f'];
+  const ck={shape:'star',ice:'#ffffff',top:'#e74c3c',dots:[],lines:[],hist:[],mode:'bon',baked:false,to:null};
+  const ICE=['#ffffff','#ffd1dc','#bfe3ff','#fff3b0','#d8f5d0','#e9c9ff'],TOP=['#e74c3c','#2f6b4f','#2a6f9e','#f4c95d','#c25b8f','#ffffff','#5a2d17'];
   const draw=()=>{
-    $('#panel').innerHTML=`<h2>Atelier des biscuits</h2><p>Choisis une forme, un glaçage, puis touche le biscuit pour poser des bonbons. Ensuite, direction le four !</p>
+    $('#panel').innerHTML=`<h2>Atelier des biscuits</h2><p>Choisis une forme, un glaçage, puis pose des bonbons ou dessine au glaçage. Ensuite, direction le four !</p>
+    <div class="row"><button class="btn ghost sm" id="ckVit">Voir la vitrine des biscuits</button></div>
     <div class="opt"><b>Forme</b>${[['star','Étoile'],['tree','Sapin'],['man','Bonhomme']].map(([k,l])=>`<button class="chip ${ck.shape===k?'on':''}" data-sh="${k}">${l}</button>`).join('')}</div>
     <div class="opt"><b>Glaçage</b>${ICE.map(c=>`<button class="sw ${ck.ice===c?'on':''}" data-ice="${c}" style="background:${c};border-color:#b98a54"></button>`).join('')}</div>
-    <div class="opt"><b>Bonbons</b>${TOP.map(c=>`<button class="sw ${ck.top===c?'on':''}" data-top="${c}" style="background:${c}"></button>`).join('')}<button class="chip" id="ckClear">Effacer</button></div>
-    <div class="ckwrap"><svg id="ckSvg" viewBox="0 0 200 200"><g fill="#c98b4a" stroke="#a8692f" stroke-width="3">${CK_SHAPES[ck.shape]}</g><g fill="${ck.ice}" transform="translate(100 100) scale(.84) translate(-100 -100)">${CK_SHAPES[ck.shape]}</g>${ck.dots.map(candy).join('')}</svg></div>
+    <div class="opt"><b>Outil</b><button class="chip ${ck.mode==='bon'?'on':''}" data-mode="bon">Bonbons (${ck.dots.length}/${CK_MAXDOTS})</button><button class="chip ${ck.mode==='dess'?'on':''}" data-mode="dess">Dessin (${ck.lines.length}/${CK_MAXLINES} traits)</button></div>
+    <div class="opt"><b>Couleur</b>${TOP.map(c=>`<button class="sw ${ck.top===c?'on':''}" data-top="${c}" style="background:${c};border-color:#b98a54"></button>`).join('')}<button class="chip" id="ckUndo">Annuler</button><button class="chip" id="ckClear">Tout effacer</button></div>
+    <div class="ckwrap"><svg id="ckSvg" viewBox="0 0 200 200" style="touch-action:${ck.mode==='dess'?'none':'auto'};cursor:${ck.mode==='dess'?'crosshair':'pointer'}">${ckBody(ck)}</svg></div>
     <div id="ckEnd">${ck.baked?'':'<button class="btn primary" id="ckBake">Mettre au four</button>'}</div>`;
     if(ck.baked)endUI();
   };
   const endUI=()=>{
     const o=chars.filter(c=>!c.hidden&&!c.isMe);
-    $('#ckEnd').innerHTML=`<p><b>Biscuit cuit, quelle belle réussite !</b></p><p class="note">Tu peux l'offrir anonymement à un collègue (+2 points) : un lutin le lui apportera.</p><div class="opt" id="ckTo">${o.map(c=>`<button class="chip ${ck.to===c.n?'on':''}" data-to="${esc(c.n)}">${esc(c.n)}</button>`).join('')}</div><div class="row"><button class="btn green" id="ckGive" ${ck.to?'':'disabled'}>Offrir ce biscuit</button><button class="btn ghost" id="ckNew">Faire un autre biscuit</button></div>`;
+    $('#ckEnd').innerHTML=`<p><b>Biscuit cuit, quelle belle réussite !</b></p><p class="note">Offre-le à un collègue (+2 points) : un lutin le lui apportera, et il sera exposé dans la vitrine de la boulangerie, avec ton nom.</p><div class="opt" id="ckTo">${o.map(c=>`<button class="chip ${ck.to===c.n?'on':''}" data-to="${esc(c.n)}">${esc(c.n)}</button>`).join('')}</div><div class="row"><button class="btn green" id="ckGive" ${ck.to?'':'disabled'}>Offrir ce biscuit</button><button class="btn ghost" id="ckNew">Faire un autre biscuit</button></div>`;
   };
-  $('#panel').onclick=e=>{
+  const P=$('#panel');let cur=null;
+  const redraw=()=>{const g=$('#ckLines');if(g)g.innerHTML=ck.lines.map(ckLine).join('');};
+  const pt=e=>{const r=$('#ckSvg').getBoundingClientRect();return [Math.max(0,Math.min(200,Math.round((e.clientX-r.left)/r.width*200))),Math.max(0,Math.min(200,Math.round((e.clientY-r.top)/r.height*200)))];};
+  P.onpointerdown=e=>{
+    if(ck.baked||ck.mode!=='dess'||!e.target.closest('#ckSvg'))return;
+    if(ck.lines.length>=CK_MAXLINES){toast('Le glaçage est épuisé : annule un trait pour en refaire un.');return;}
+    e.preventDefault();cur={c:ck.top,p:[pt(e)]};ck.lines.push(cur);ck.hist.push('l');redraw();
+    try{$('#ckSvg').setPointerCapture(e.pointerId);}catch(err){}
+  };
+  P.onpointermove=e=>{if(!cur)return;const q=pt(e),l=cur.p[cur.p.length-1];if(Math.hypot(q[0]-l[0],q[1]-l[1])<3||cur.p.length>=CK_MAXPTS)return;cur.p.push(q);redraw();};
+  P.onpointerup=P.onpointercancel=()=>{if(cur){cur=null;draw();}};
+  P.onclick=e=>{
     const t=e.target;
+    if(t.closest('#ckVit')){showVitrine();return;}
     if(ck.baked&&!t.closest('[data-to],#ckGive,#ckNew'))return;
-    if(t.closest('[data-sh]')){ck.shape=t.closest('[data-sh]').dataset.sh;ck.dots=[];draw();}
+    if(t.closest('[data-sh]')){ck.shape=t.closest('[data-sh]').dataset.sh;ck.dots=[];ck.lines=[];ck.hist=[];draw();}
     else if(t.closest('[data-ice]')){ck.ice=t.closest('[data-ice]').dataset.ice;draw();}
     else if(t.closest('[data-top]')){ck.top=t.closest('[data-top]').dataset.top;draw();}
-    else if(t.closest('#ckClear')){ck.dots=[];draw();}
+    else if(t.closest('[data-mode]')){ck.mode=t.closest('[data-mode]').dataset.mode;draw();}
+    else if(t.closest('#ckUndo')){const h=ck.hist.pop();if(h==='d')ck.dots.pop();else if(h==='l')ck.lines.pop();draw();}
+    else if(t.closest('#ckClear')){ck.dots=[];ck.lines=[];ck.hist=[];draw();}
     else if(t.closest('#ckBake')){const sv=$('#ckSvg');sv.classList.add('bake');t.closest('#ckBake').disabled=true;setTimeout(()=>{ck.baked=true;earnDaily('biscuit',3,'biscuit décoré');endUI();},2000);}
     else if(t.closest('[data-to]')){ck.to=t.closest('[data-to]').dataset.to;endUI();}
-    else if(t.closest('#ckGive')&&ck.to){const c=chars.find(x=>x.n===ck.to);closeInterior();earnMot();sendMsg(c,'mot','Un lutin a déposé un biscuit de Noël décoré pour toi. Régale-toi !');toast(`Un lutin file porter ton biscuit à ${c.n}. Tu restes anonyme.`);sendElf(c,()=>{wobble(c);if(!API.on)addNote(c,'Un lutin a déposé un biscuit de Noël décoré pour toi. Régale-toi !');});}
-    else if(t.closest('#ckNew')){ck.dots=[];ck.baked=false;ck.to=null;draw();}
-    else if(t.closest('#ckSvg')&&!ck.baked&&ck.dots.length<20){const sv=$('#ckSvg'),r=sv.getBoundingClientRect();ck.dots.push({x:Math.round((e.clientX-r.left)/r.width*200),y:Math.round((e.clientY-r.top)/r.height*200),c:ck.top});
-      sv.insertAdjacentHTML('beforeend',candy(ck.dots.at(-1)));}
+    else if(t.closest('#ckGive')&&ck.to){
+      const c=chars.find(x=>x.n===ck.to),MSG='Un lutin a déposé un biscuit de Noël décoré pour toi. Régale-toi !',data={shape:ck.shape,ice:ck.ice,dots:ck.dots,lines:ck.lines};
+      closeInterior();earnMot();
+      if(API.on)API.rpc('give_cookie',{p_token:TOKEN,p_to:c.n,p_data:data}).catch(()=>sendMsg(c,'mot',MSG));else DEMO_CK.unshift({from:me.n,to:c.n,data:data,at:Date.now()});
+      toast(`Un lutin file porter ton biscuit à ${c.n}. Retrouve-le dans la vitrine de la boulangerie.`);
+      sendElf(c,()=>{wobble(c);if(!API.on)addNote(c,MSG);});}
+    else if(t.closest('#ckNew')){ck.dots=[];ck.lines=[];ck.hist=[];ck.baked=false;ck.to=null;draw();}
+    else if(t.closest('#ckSvg')&&!ck.baked&&ck.mode==='bon'){
+      if(ck.dots.length>=CK_MAXDOTS){toast('Le biscuit est bien garni ! Annule un bonbon pour en poser un autre.');return;}
+      const sv=$('#ckSvg'),r=sv.getBoundingClientRect();ck.dots.push({x:Math.round((e.clientX-r.left)/r.width*200),y:Math.round((e.clientY-r.top)/r.height*200),c:ck.top});ck.hist.push('d');
+      sv.insertAdjacentHTML('beforeend',candy(ck.dots[ck.dots.length-1]));const bt=P.querySelector('[data-mode="bon"]');if(bt)bt.textContent=`Bonbons (${ck.dots.length}/${CK_MAXDOTS})`;}
+  };
+  draw();
+}
+
+/* --- Boutique de vêtements : cabine d'essayage --- */
+let ownedSet=null,mySpent=0;
+function getOwned(){if(!ownedSet){ownedSet=new Set(API.on&&API.L&&Array.isArray(API.L.owned)?API.L.owned.filter(x=>ITEMS[x]):[]);mySpent=API.on&&API.L?(+API.L.spent||0):0;}return ownedSet;}
+const OUTFITS=[{id:'classique',n:'Classique',c:null},{id:'foret',n:'Forêt',c:{coat:'#2f6b4f',hat:'#c0392b',scarf:'#f4c95d'}},{id:'glacier',n:'Glacier',c:{coat:'#2a6f9e',hat:'#ffffff',scarf:'#bfe3ff'}},{id:'gala',n:'Gala',c:{coat:'#2b2b2b',hat:'#2b2b2b',scarf:'#f4c95d',acc:'#f4c95d'}},{id:'sakura',n:'Sakura',c:{coat:'#e8738f',hat:'#ffffff',scarf:'#c0392b'}},{id:'aurore',n:'Aurore',c:{coat:'#d9822b',hat:'#5b3f8c',scarf:'#f4c95d'}}];
+function shopWar(){
+  const ow=getOwned(),bal=()=>myPts-mySpent;
+  let tmp={...lookOf(me),n:me.n};
+  const draw=()=>{
+    const need=['hd','nk','bk'].map(k=>tmp[k]).filter(id=>id&&ITEMS[id].p>0&&!ow.has(id));
+    const sec=(k,t)=>`<div class="opt"><b>${t}</b><button class="chip ${!tmp[k]?'on':''}" data-it="${k}:">Aucun</button>${ACC[k].map(id=>{const it=ITEMS[id],own=it.p===0||ow.has(id);return `<button class="chip ${tmp[k]===id?'on':''}" data-it="${k}:${id}">${it.n}${own?'':' · '+it.p+' pts'}</button>`;}).join('')}</div>`;
+    $('#panel').innerHTML=`<h2>Boutique de vêtements</h2><p>Essaie les tenues dans la cabine, puis garde celle qui te plaît. Tu as <b>${bal()} point${bal()>1?'s':''}</b> à dépenser (ton rang au classement ne change pas).</p>
+    <div class="ckwrap"><div class="fit">${figSVG(tmp)}</div></div>
+    <div class="opt"><b>Tenues</b>${OUTFITS.map(o=>`<button class="chip" data-out="${o.id}">${o.n}</button>`).join('')}</div>${sec('hd','Tête')}${sec('nk','Cou')}${sec('bk','Dos')}
+    ${need.map(id=>`<div class="row"><button class="btn primary" data-buy="${id}" ${bal()>=ITEMS[id].p?'':'disabled'}>Acheter : ${ITEMS[id].n} (${ITEMS[id].p} pts)</button></div>`).join('')}
+    ${need.some(id=>bal()<ITEMS[id].p)?'<p class="note">Pas assez de points pour le moment : le calendrier de l\'Avent, les jeux et les mots doux en rapportent !</p>':''}
+    <div class="row"><button class="btn green" id="fitKeep" ${need.length?'disabled':''}>Garder cette tenue</button><button class="btn ghost" id="fitReset">Remettre ma tenue</button></div>`;
+  };
+  $('#panel').onclick=async e=>{
+    const t=e.target;let b;
+    if(b=t.closest('[data-it]')){const p=b.dataset.it.split(':');if(p[1])tmp[p[0]]=p[1];else delete tmp[p[0]];draw();}
+    else if(b=t.closest('[data-out]')){const o=OUTFITS.find(x=>x.id===b.dataset.out),src=o.c||CHAR[kindOf(tmp)].def;['coat','hat','scarf','acc'].forEach(f=>{if(HEXOK(src[f]))tmp[f]=src[f];});draw();}
+    else if(b=t.closest('[data-buy]')){const id=b.dataset.buy,it=ITEMS[id];if(!it||bal()<it.p)return;b.disabled=true;
+      try{if(API.on){const r=await API.rpc('buy_item',{p_token:TOKEN,p_item:id});mySpent=+r.spent||mySpent+it.p;}else mySpent+=it.p;ow.add(id);toast(`${it.n} acheté !`);sparkle(me.x,me.y-60,10,'#ffd35a');}catch(err){netErr(err);}
+      draw();}
+    else if(t.closest('#fitReset')){tmp={...lookOf(me),n:me.n};draw();}
+    else if(t.closest('#fitKeep')){const L2=lookOf(tmp);refig(me,L2);if(API.on)API.rpc('set_look',{p_token:TOKEN,p_look:L2}).catch(netErr);toast('Tenue enregistrée, tu es superbe !');sparkle(me.x,me.y-60,12,'#ffd35a');closeInterior();}
   };
   draw();
 }
@@ -1544,7 +1658,7 @@ let pourRaf=0;
 function shopCho(){
   let target=rnd(55,80),lvl=0,pouring=false,done=false,last=0,pts=0;
   const Y=p=>185-1.45*p;
-  $('#panel').innerHTML=`<h2>Le chocolat chaud parfait</h2><p>Maintiens le bouton pour verser le chocolat, et relâche pile sur le trait doré. Plus tu es précis, plus tu gagnes de points (jusqu'à +3 par jour).</p>
+  $('#panel').innerHTML=`<h2>Le chocolat chaud parfait</h2><p>Maintiens le bouton pour verser le chocolat, et relâche pile sur le trait doré. Attention : le chocolat prend de l'élan et continue de couler un instant après que tu as relâché. Plus tu es précis, plus tu gagnes de points (jusqu'à +3 par jour).</p>
   <div class="ckwrap"><svg viewBox="0 0 170 200" width="170" height="200"><defs><clipPath id="cupClip"><path d="M30 40 H130 L120 170 Q118 185 100 185 H60 Q42 185 40 170 Z"/></clipPath></defs>
    <rect id="liq" x="20" y="185" width="120" height="0" fill="#5a2d17" clip-path="url(#cupClip)"/><g id="top" clip-path="url(#cupClip)"></g>
    <path d="M30 40 H130 L120 170 Q118 185 100 185 H60 Q42 185 40 170 Z" fill="rgba(255,255,255,.18)" stroke="#fff" stroke-width="5"/>
@@ -1554,9 +1668,11 @@ function shopCho(){
   <div class="row" style="justify-content:center"><button class="btn primary pourbtn" id="pour">Maintiens pour verser</button></div><div id="chRes" style="text-align:center;margin-top:10px"></div>`;
   const liq=$('#liq');
   const set=()=>{const h=1.45*lvl;liq.setAttribute('y',185-h);liq.setAttribute('height',h);};
-  const loop=t=>{if(!pouring)return;const dt=Math.min(.05,(t-last)/1000);last=t;lvl=Math.min(100,lvl+38*dt);set();if(lvl>=100){stop();return;}pourRaf=requestAnimationFrame(loop);};
-  const start=e=>{if(done)return;e.preventDefault();pouring=true;last=performance.now();pourRaf=requestAnimationFrame(loop);};
-  const stop=()=>{if(!pouring)return;pouring=false;cancelAnimationFrame(pourRaf);done=true;
+  let v=0,hold=false;
+  const loop=t=>{if(!pouring)return;const dt=Math.min(.05,(t-last)/1000);last=t;v=hold?Math.min(62,v+60*dt):Math.max(0,v-70*dt);lvl=Math.min(100,lvl+v*dt);set();if(lvl>=100){lvl=100;set();finish();return;}if(!hold&&v<=0){finish();return;}pourRaf=requestAnimationFrame(loop);};
+  const start=e=>{if(done||pouring)return;e.preventDefault();pouring=true;hold=true;last=performance.now();pourRaf=requestAnimationFrame(loop);};
+  const stop=()=>{if(pouring)hold=false;};
+  const finish=()=>{if(done)return;pouring=false;cancelAnimationFrame(pourRaf);done=true;
     const d=Math.abs(lvl-target);pts=d<=6?3:d<=14?2:1;
     $('#steam').setAttribute('opacity','.8');
     $('#chRes').innerHTML=`<p><b>${d<=6?'Parfait !':d<=14?'Très bien !':'Pas mal, tu y es presque !'}</b> Écart : ${d.toFixed(0)} %.</p><div class="opt" style="justify-content:center">${[['cream','Chantilly'],['marsh','Guimauves'],['cin','Cannelle']].map(([k,l])=>`<button class="chip" data-tp="${k}">${l}</button>`).join('')}</div><div class="row" style="justify-content:center"><button class="btn green" id="chOk">Servir (+${pts} pt${pts>1?'s':''})</button><button class="btn ghost" id="chAgain">Rejouer</button></div>`;};
@@ -1580,7 +1696,7 @@ $('#go').onclick=async()=>{
   if(CFG.fx.music)startMusic();$('#intro').classList.add('hide');
   genSlots(TEAM.length);
   const mm={...cust};
-  if(API.on)API.rpc('set_look',{p_token:TOKEN,p_look:{kind:kindOf(mm),coat:mm.coat,hat:mm.hat,scarf:mm.scarf,skin:mm.skin,acc:mm.acc,glasses:!!mm.glasses}}).catch(netErr);
+  if(API.on)API.rpc('set_look',{p_token:TOKEN,p_look:lookOf(mm)}).catch(netErr);
   if(API.on&&(mm.face||'')!==(API.L.face||''))API.rpc('set_face',{p_token:TOKEN,p_data:mm.face||''}).catch(netErr);
   const hiddenNames=API.on?API.V.filter(v=>v.participates===false&&v.name!==chosen).map(v=>v.name):TEAM.filter(m=>m.n!==chosen).sort(()=>Math.random()-.5).slice(0,TEAM.length>=9?2:TEAM.length>=5?1:0).map(m=>m.n);
   const others=TEAM.filter(m=>m.n!==chosen&&!hiddenNames.includes(m.n));
@@ -1590,7 +1706,7 @@ $('#go').onclick=async()=>{
   me=mk(mm,true);if(API.on&&API.L.notes&&API.L.notes.length)me.notes=API.L.notes.slice();me.x=700;me.y=730;me.tx=me.x;me.ty=me.y;me.timer=3;place(me);me.wrap.style.opacity=0;dropIn(me);
   await sleep(2600);if(API.on&&API.L.participates!==null)returning();else showEnvelope();
 };
-$('#btnReady').onclick=()=>{if(!me||me.bought)return;makeReady(me);$('#btnReady').textContent='Cadeau prêt, bravo !';$('#btnReady').disabled=true;toast('Ton bonhomme file vers le sapin avec son cadeau.');};
+$('#btnReady').onclick=()=>{if(!me)return;if(me.bought){if(API.on&&API.opened){toast('Trop tard : les cadeaux sont déjà ouverts !');return;}unmakeReady(me);return;}makeReady(me);setReadyBtn();toast('Ton bonhomme file vers le sapin avec son cadeau. Tu peux encore le reprendre avec le même bouton.');};
 $('#btnLetter').onclick=()=>{stepDraw();};
 $('#btnFind').onclick=()=>{if(me&&!me.hidden)camT=me.x;};
 $('#dDraw').onclick=()=>{drawn=true;$('#btnLetter').classList.remove('hidden');stepDraw();};
@@ -1615,11 +1731,12 @@ buildBG();fit();sizeSnow();applyTime();fetchWeather();requestAnimationFrame(tick
 function pilePos(n){const N=Math.max(TEAM.length,1);let b=5;while(b*(b+1)/2<N)b++;const sc=Math.min(1,5.2/b);let row=0,left=n,w=b;while(left>=w){left-=w;w--;row++;}
   return {dx:(left-(w-1)/2)*35*sc,dy:-row*24*sc,sc};}
 let pileN=0;
+function relayoutPile(){const P=document.getElementById('pile'),gs=[...P.querySelectorAll(':scope > g')];gs.forEach((g,i)=>{const q=pilePos(i);g.setAttribute('transform',`translate(${q.dx},${q.dy}) scale(${q.sc})`);});pileN=gs.length;}
 function addToPile(c){
-  const n=pileN++;if(n>=Math.max(TEAM.length,1)+2)return;const{dx,dy,sc}=pilePos(n);const col=pick(['#e74c3c','#2f6b4f','#2a6f9e','#f4c95d','#c25b8f','#5b3f8c','#d9822b']);
+  const n=document.getElementById('pile').querySelectorAll(':scope > g').length;pileN=n+1;if(n>=Math.max(TEAM.length,1)+2)return;const{dx,dy,sc}=pilePos(n);const col=pick(['#e74c3c','#2f6b4f','#2a6f9e','#f4c95d','#c25b8f','#5b3f8c','#d9822b']);
   const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('transform',`translate(${dx},${dy}) scale(${sc})`);
   g.innerHTML=`<g class="gbi"><rect x="-16" y="-26" width="32" height="26" rx="3" fill="${col}"/><rect x="-3" y="-26" width="6" height="26" fill="#ffd35a"/><rect x="-16" y="-16" width="32" height="5" fill="#ffd35a"/><path d="M0 -26 q-9 -12 -14 -4 q4 6 14 4 q10 2 14 -4 q-5 -8 -14 4" fill="#ffd35a" stroke="#e0b23d" stroke-width="1"/></g>`;
-  document.getElementById('pile').appendChild(g);sparkle(800+dx,678+dy-12,10,'#ffe08a');
+  c.pg=g;document.getElementById('pile').appendChild(g);sparkle(800+dx,678+dy-12,10,'#ffe08a');
 }
 
 /* ---------- courrier des lutins (notifications dans l'app) ---------- */
@@ -1679,7 +1796,7 @@ function initSetup(){
     ['snow','Neige à l\'écran','Flocons qui tombent, avec réglage par chacun.','v-snow',[...Array(9)].map((_,k)=>`<i style="left:${6+k*10}%;animation-delay:${(k*.37).toFixed(2)}s"></i>`).join('')],
     ['advent','Calendrier de l\'Avent et points','24 portes, quiz, défis et classement.','v-adv','<i style="left:10%;background:#c0392b"></i><i style="left:36%;background:#2f6b4f"></i><i style="left:62%;background:#f4c95d;animation-delay:.7s"></i>'],
     ['photo','Défis photo','5 portes demandent une photo, avec mur et likes.','v-pho','<i class="fr"></i><i class="fl"></i>'],
-    ['shops','Boutiques à visiter','Biscuits, paires, quiz, chocolat chaud.','v-shop','<i class="bd"></i><i class="rf"></i><i class="dr"></i>']];
+    ['shops','Boutiques à visiter','Biscuits, paires, quiz, chocolat chaud et cabine d\'essayage.','v-shop','<i class="bd"></i><i class="rf"></i><i class="dr"></i>']];
   let peekT=null,peekUndo=null;
   const endPeek=()=>{clearTimeout(peekT);if(peekUndo)peekUndo();peekUndo=null;root.classList.remove('peek');$('#peekBar').classList.add('hidden');};
   const peek=(fn,undo,ms)=>{root.classList.add('peek');$('#peekBar').classList.remove('hidden');fn();peekUndo=undo;peekT=setTimeout(endPeek,ms);};
